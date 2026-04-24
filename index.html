@@ -93,7 +93,7 @@
     .bd-sched  { background: var(--amber-l); color: var(--amber-t); }
     .post-time { margin-left: auto; font-size: 11px; color: var(--text3); }
     .post-content { font-size: 14px; line-height: 1.7; }
-    .post-author { font-size: 12px; color: var(--text3); margin-top: 8px; }
+    .post-author { font-size: 12px; color: var(--text2); margin-top: 8px; }
     .post-imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap: 6px; margin-top: 10px; }
     .post-imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--rs); cursor: pointer; border: 1px solid var(--border); transition: opacity .13s; }
     .post-imgs img:hover { opacity: .85; }
@@ -316,8 +316,7 @@ function renderCompose() {
           <div class="upload-hint2">JPG, PNG (자동 압축 적용)</div>
         </div>
         <input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
-        <div class="compose-foot">
-          <input class="author-in" id="author-input" placeholder="이름/닉네임" maxlength="10" />
+        <div class="compose-foot" style="justify-content:flex-end;">
           <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
         </div>
       </div>`; return;
@@ -334,10 +333,7 @@ function renderCompose() {
           <button class="tbtn"        data-type="notice"   onclick="setType('notice')">공지</button>
           <button class="tbtn"        data-type="general"  onclick="setType('general')">일반</button>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input class="author-in" id="author-input" placeholder="이름/닉네임" maxlength="10" />
-          <button class="post-btn" id="post-btn" onclick="submitPost()">게시</button>
-        </div>
+        <button class="post-btn" id="post-btn" onclick="submitPost()">게시</button>
       </div>
     </div>`;
   activeType = 'tip';
@@ -386,7 +382,7 @@ window.removeImg = function(i) { pendingImgs.splice(i,1); renderPreviews(); };
 // ── Submit ──
 window.submitPost = async function() {
   const btn    = document.getElementById('post-btn');
-  const author = (document.getElementById('author-input')?.value||'').trim()||'익명';
+  const author = '';
   if (activeTab === '스케줄') {
     if (!pendingImgs.length) { showToast('이미지를 먼저 추가해주세요'); return; }
     btn.disabled = true;
@@ -448,13 +444,15 @@ window.saveEdit = async function(id) {
 
 // ── Render posts ──
 function fmtTime(ts) {
-  if (!ts) return '방금';
+  if (!ts) return '';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
-  const s = Math.floor((Date.now()-d)/1000);
-  if (s<60) return '방금';
-  if (s<3600) return Math.floor(s/60)+'분 전';
-  if (s<86400) return Math.floor(s/3600)+'시간 전';
-  return `${d.getMonth()+1}/${d.getDate()}`;
+  const now = new Date();
+  const sameDay = d.toDateString() === now.toDateString();
+  const mm = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  const hh = String(d.getHours()).padStart(2,'0');
+  const min = String(d.getMinutes()).padStart(2,'0');
+  return sameDay ? `오늘 ${hh}:${min}` : `${mm}/${dd} ${hh}:${min}`;
 }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
 
@@ -694,7 +692,7 @@ function renderPosts() {
       <div class="sched-card">
         <img src="${p.images?.[0]||''}" alt="${esc(p.content)}" loading="lazy" onclick="openLightbox('${encodeURIComponent(p.images?.[0]||'')}')"/>
         <div class="sched-info">
-          <div><div class="sched-name">${esc(p.content)}</div><div class="sched-meta">${esc(p.author)} · ${fmtTime(p.createdAt)}</div></div>
+          <div><div class="sched-name">${esc(p.content)}</div><div class="sched-meta">${fmtTime(p.createdAt)}</div></div>
           <button class="sched-del" onclick="deleteSchedPost(event,'${p.id}')">✕</button>
         </div>
       </div>`).join('')}</div>`;
@@ -716,7 +714,7 @@ function renderPosts() {
         </div>
         <div class="post-content">${esc(p.content)}</div>
         ${imgs.length?`<div class="post-imgs">${imgs.map(src=>`<img src="${src}" onclick="openLightbox('${encodeURIComponent(src)}')" loading="lazy"/>`).join('')}</div>`:''}
-        <div class="post-author">${esc(p.author||'익명')}</div>
+        <div class="post-author">${fmtTime(p.createdAt)}</div>
         <div class="post-actions">
           <button class="action-btn${p.important?' imp-on':''}" onclick="toggleImportant('${p.id}',${!!p.important})">⭐ ${p.important?'중요 해제':'중요'}</button>
           <button class="action-btn" onclick="startEdit('${p.id}',\`${(p.content||'').replace(/`/g,"'").replace(/\n/g,'\\n')}\`)">✏️ 수정</button>
