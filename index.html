@@ -34,7 +34,7 @@
     .dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,.2); }
     .dot-label { font-size: 12px; color: var(--text2); margin-left: 6px; }
 
-    .main { max-width: 800px; margin: 0 auto; padding: 1.25rem 1.25rem 5rem; }
+    .main { max-width: 800px; margin: 0 auto; padding: 1.25rem 1.25rem 1rem; }
 
     /* Tabs */
     .tabs-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 7px; margin-bottom: 1.1rem; }
@@ -50,7 +50,8 @@
     .tab:not(.active) .tab-menu-btn:hover { background: rgba(0,0,0,.08); }
 
     /* Compose */
-    .compose { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; margin-bottom: 1rem; }
+    .compose { background: var(--surface); border-top: 1.5px solid var(--border); border-radius: 0; padding: 1rem 1.25rem; position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; box-shadow: 0 -4px 20px rgba(0,0,0,.08); }
+    .compose-inner { max-width: 800px; margin: 0 auto; }
     .compose-lbl { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 10px; }
     .compose textarea { width: 100%; resize: none; border: 1px solid var(--border); border-radius: var(--rs); padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--surface2); min-height: 78px; outline: none; transition: border-color .13s; line-height: 1.6; }
     .compose textarea:focus { border-color: var(--blue); }
@@ -167,7 +168,7 @@
     .modal-btns .danger  { background: var(--red);  color: #fff; border-color: var(--red); }
 
     @media (max-width: 600px) {
-      .main { padding: 1rem .85rem 5rem; }
+      .main { padding: 1rem .85rem 1rem; }
       .hdr  { padding: 0 .85rem; }
       .compose-foot { flex-direction: column; align-items: flex-start; }
     }
@@ -225,10 +226,10 @@
   </header>
   <main class="main">
     <div class="tabs-wrap" id="tabs-wrap"></div>
-    <div id="compose-area"></div>
     <div id="posts-container"><div class="loading">불러오는 중...</div></div>
   </main>
 </div>
+<div id="compose-area"></div>
 <div class="toast" id="toast"></div>
 <div id="modal-area"></div>
 
@@ -335,30 +336,28 @@ window.deleteTab = async function(dept) {
 function renderCompose() {
   const area = document.getElementById('compose-area');
 
-  if (activeTab === '사용방법') { area.innerHTML = ''; return; }
-  if (activeTab === '중요')     { area.innerHTML = `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1rem;text-align:center;">
-      <div style="font-size:22px;margin-bottom:6px;">⭐</div>
-      <div style="font-size:14px;color:var(--text2);">각 탭 게시물에서 ⭐ 버튼을 누르면 여기에 모입니다</div>
-    </div>`; return; }
+  if (activeTab === '사용방법' || activeTab === '중요') { area.innerHTML = ''; return; }
+
 
   if (activeTab === '스케줄') {
     area.innerHTML = `
       <div class="compose">
-        <div class="compose-lbl">스케줄 이미지 업로드</div>
-        <div class="prev-wrap" id="prev-wrap"></div>
-        <div class="img-upload-area" id="upload-zone"
-          onclick="document.getElementById('file-in').click()"
-          ondragover="event.preventDefault();this.classList.add('drag-over')"
-          ondragleave="this.classList.remove('drag-over')"
-          ondrop="handleDrop(event)">
-          <div class="upload-icon">🖼️</div>
-          <div class="upload-hint">클릭하거나 이미지를 드래그하세요</div>
-          <div class="upload-hint2">JPG, PNG (자동 압축 적용)</div>
-        </div>
-        <input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
-        <div class="compose-foot" style="justify-content:flex-end;">
-          <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
+        <div class="compose-inner">
+          <div class="compose-lbl">스케줄 이미지 업로드</div>
+          <div class="prev-wrap" id="prev-wrap"></div>
+          <div class="img-upload-area" id="upload-zone"
+            onclick="document.getElementById('file-in').click()"
+            ondragover="event.preventDefault();this.classList.add('drag-over')"
+            ondragleave="this.classList.remove('drag-over')"
+            ondrop="handleDrop(event)">
+            <div class="upload-icon">🖼️</div>
+            <div class="upload-hint">클릭하거나 이미지를 드래그하세요</div>
+            <div class="upload-hint2">JPG, PNG (자동 압축 적용)</div>
+          </div>
+          <input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
+          <div class="compose-foot" style="justify-content:flex-end;">
+            <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
+          </div>
         </div>
       </div>`; return;
   }
@@ -378,6 +377,11 @@ function renderCompose() {
       </div>
     </div>`;
   activeType = 'tip';
+  requestAnimationFrame(() => {
+    const c = document.querySelector('.compose');
+    const main = document.querySelector('.main');
+    if (c && main) main.style.paddingBottom = (c.offsetHeight + 16) + 'px';
+  });
 }
 
 window.setType = function(t) {
