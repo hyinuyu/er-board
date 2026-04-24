@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>응급의학과 담벼락</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --surface2: #f9f8f5;
+      --border: rgba(0,0,0,0.08);
+      --border-hover: rgba(0,0,0,0.16);
+      --text: #1a1a1a;
+      --text2: #6b6b6b;
+      --text3: #aaaaaa;
+      --blue: #1a5fa8;
+      --blue-light: #e8f0fb;
+      --blue-text: #0d3d6e;
+      --red: #c0392b;
+      --red-light: #fdecea;
+      --red-text: #7b1a12;
+      --green: #1a7a55;
+      --green-light: #e4f5ee;
+      --green-text: #0d4a32;
+      --amber: #9a6200;
+      --amber-light: #fef6e4;
+      --amber-text: #5c3a00;
+      --purple: #5a3eb0;
+      --purple-light: #eeebfc;
+      --purple-text: #2e1d6b;
+      --gray-light: #f0efe9;
+      --gray-text: #444;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+    .header-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .online-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 2px rgba(34,197,94,0.2);
+    }
+    .online-label { font-size: 12px; color: var(--text2); }
+
+    /* ── Layout ── */
+    .main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 4rem;
+    }
+
+    /* ── Tabs ── */
+    .tabs-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 1.1rem;
+    }
+    .tab {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text2);
+      transition: all 0.13s;
+      user-select: none;
+    }
+    .tab:hover { border-color: var(--border-hover); color: var(--text); }
+    .tab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .tab.add-tab {
+      border-style: dashed;
+      color: var(--text3);
+      background: transparent;
+    }
+    .tab.add-tab:hover { color: var(--text2); border-color: var(--border-hover); }
+
+    /* ── Compose ── */
+    .compose {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.1rem;
+    }
+    .compose-header {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text3);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .compose textarea {
+      width: 100%;
+      resize: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--surface2);
+      min-height: 80px;
+      outline: none;
+      transition: border-color 0.13s;
+      line-height: 1.6;
+    }
+    .compose textarea:focus { border-color: var(--blue); }
+    .compose textarea::placeholder { color: var(--text3); }
+    .compose-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .type-row { display: flex; gap: 5px; flex-wrap: wrap; }
+    .type-btn {
+      padding: 4px 11px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text2);
+      transition: all 0.12s;
+      font-family: inherit;
+    }
+    .type-btn:hover { border-color: var(--border-hover); }
+    .type-btn.active[data-type="tip"]      { background: var(--blue-light);   color: var(--blue-text);   border-color: #b3ccee; }
+    .type-btn.active[data-type="protocol"] { background: var(--green-light);  color: var(--green-text);  border-color: #a8dcc5; }
+    .type-btn.active[data-type="notice"]   { background: var(--red-light);    color: var(--red-text);    border-color: #f0b9b4; }
+    .type-btn.active[data-type="general"]  { background: var(--gray-light);   color: var(--gray-text);   border-color: #ccc; }
+    .author-input {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--surface2);
+      outline: none;
+      width: 90px;
+      transition: border-color 0.13s;
+    }
+    .author-input:focus { border-color: var(--blue); }
+    .post-btn {
+      padding: 7px 22px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.13s;
+    }
+    .post-btn:hover { opacity: 0.85; }
+    .post-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Posts ── */
+    .posts { display: flex; flex-direction: column; gap: 8px; }
+    .post-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      transition: border-color 0.13s, transform 0.13s;
+    }
+    .post-card:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+    .post-card.pinned { border-left: 3px solid var(--blue); }
+    .post-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 9px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      padding: 2px 9px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    .badge-dept { background: var(--purple-light); color: var(--purple-text); }
+    .badge-dept-all { background: var(--gray-light); color: var(--gray-text); }
+    .badge-notice   { background: var(--red-light);   color: var(--red-text); }
+    .badge-protocol { background: var(--green-light); color: var(--green-text); }
+    .badge-tip      { background: var(--blue-light);  color: var(--blue-text); }
+    .badge-general  { background: var(--gray-light);  color: var(--gray-text); }
+    .pin-icon { font-size: 13px; }
+    .post-time { margin-left: auto; font-size: 11px; color: var(--text3); white-space: nowrap; }
+    .post-content {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+    }
+    .post-author {
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 8px;
+    }
+
+    /* ── Empty ── */
+    .empty {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text3);
+      font-size: 14px;
+    }
+
+    /* ── Loading ── */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text3);
+      font-size: 14px;
+    }
+
+    /* ── Modal ── */
+    .modal-bg {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.3);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200;
+      backdrop-filter: blur(2px);
+    }
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      width: 300px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+    .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; }
+    .modal input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--surface2);
+      color: var(--text);
+      outline: none;
+      margin-bottom: 1rem;
+      transition: border-color 0.13s;
+    }
+    .modal input:focus { border-color: var(--blue); }
+    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
+    .modal-btns button {
+      padding: 7px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text2);
+      transition: all 0.12s;
+    }
+    .modal-btns .confirm {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 9px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      opacity: 0;
+      transition: all 0.2s;
+      pointer-events: none;
+      z-index: 300;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Config screen ── */
+    #config-screen {
+      max-width: 500px;
+      margin: 5rem auto;
+      padding: 2rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    #config-screen h2 { font-size: 18px; font-weight: 600; margin-bottom: 0.5rem; }
+    #config-screen p { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; line-height: 1.6; }
+    .config-field { margin-bottom: 1rem; }
+    .config-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 4px; letter-spacing: 0.3px; }
+    .config-field input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      font-size: 13px;
+      font-family: 'Pretendard', monospace;
+      background: var(--surface2);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.13s;
+    }
+    .config-field input:focus { border-color: var(--blue); }
+    .config-save {
+      width: 100%;
+      padding: 10px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 0.5rem;
+    }
+    .config-note {
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .main { padding: 1rem 0.85rem 4rem; }
+      .header { padding: 0 0.85rem; }
+      .compose-footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Config screen shown if no Firebase config -->
+<div id="config-screen" style="display:none;">
+  <h2>🔥 Firebase 연결 설정</h2>
+  <p>처음 한 번만 설정하면 됩니다.<br>Firebase 프로젝트의 설정값을 입력해 주세요.</p>
+  <div class="config-field">
+    <label>API KEY</label>
+    <input id="cfg-apiKey" placeholder="AIzaSy..." />
+  </div>
+  <div class="config-field">
+    <label>AUTH DOMAIN</label>
+    <input id="cfg-authDomain" placeholder="your-project.firebaseapp.com" />
+  </div>
+  <div class="config-field">
+    <label>PROJECT ID</label>
+    <input id="cfg-projectId" placeholder="your-project-id" />
+  </div>
+  <div class="config-field">
+    <label>APP ID</label>
+    <input id="cfg-appId" placeholder="1:123456:web:abcdef..." />
+  </div>
+  <button class="config-save" onclick="saveConfig()">저장하고 시작하기</button>
+  <p class="config-note">입력한 설정값은 브라우저에만 저장되며, GitHub 코드에는 올라가지 않습니다.</p>
+</div>
+
+<!-- Main app (hidden until Firebase ready) -->
+<div id="app" style="display:none;">
+  <header class="header">
+    <div class="header-inner">
+      <div>
+        <h1>응급의학과 담벼락</h1>
+      </div>
+      <div class="header-right">
+        <div class="online-dot"></div>
+        <span class="online-label" id="online-label">실시간 연결됨</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="tabs-wrap" id="tabs-wrap"></div>
+
+    <div class="compose">
+      <div class="compose-header">새 게시물</div>
+      <textarea id="compose-text" placeholder="오늘 정형외과에서 연락 온 내용, 협진 프로토콜, 공지사항 등을 공유하세요..."></textarea>
+      <div class="compose-footer">
+        <div class="type-row" id="type-row">
+          <button class="type-btn active" data-type="tip" onclick="setType('tip')">정보공유</button>
+          <button class="type-btn" data-type="protocol" onclick="setType('protocol')">프로토콜</button>
+          <button class="type-btn" data-type="notice" onclick="setType('notice')">공지</button>
+          <button class="type-btn" data-type="general" onclick="setType('general')">일반</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input class="author-input" id="author-input" placeholder="이름/닉네임" maxlength="10" />
+          <button class="post-btn" id="post-btn" onclick="submitPost()">게시</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="posts" id="posts-container">
+      <div class="loading">불러오는 중...</div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="modal-area"></div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import {
+  getFirestore, collection, addDoc, onSnapshot,
+  query, orderBy, serverTimestamp, doc, setDoc, getDoc, deleteDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ── Config management ──
+const CONFIG_KEY = 'er_board_firebase_config';
+
+function getConfig() {
+  try { return JSON.parse(localStorage.getItem(CONFIG_KEY)); } catch { return null; }
+}
+
+function saveConfig() {
+  const cfg = {
+    apiKey:     document.getElementById('cfg-apiKey').value.trim(),
+    authDomain: document.getElementById('cfg-authDomain').value.trim(),
+    projectId:  document.getElementById('cfg-projectId').value.trim(),
+    appId:      document.getElementById('cfg-appId').value.trim(),
+  };
+  if (!cfg.apiKey || !cfg.projectId) {
+    alert('API Key와 Project ID는 필수입니다.');
+    return;
+  }
+  localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg));
+  location.reload();
+}
+window.saveConfig = saveConfig;
+
+const firebaseConfig = getConfig();
+if (!firebaseConfig) {
+  document.getElementById('config-screen').style.display = 'block';
+} else {
+  startApp(firebaseConfig);
+}
+
+// ── App ──
+function startApp(config) {
+  document.getElementById('app').style.display = 'block';
+
+  const app = initializeApp(config);
+  const db = getFirestore(app);
+
+  // State
+  let activeTab = '전체';
+  let activeType = 'tip';
+  let departments = ['전체', '정형외과', '신경외과', '내과', '외과', '산부인과'];
+  let allPosts = [];
+
+  const typeLabels   = { tip: '정보공유', protocol: '프로토콜', notice: '공지', general: '일반' };
+  const typeBadge    = { tip: 'badge-tip', protocol: 'badge-protocol', notice: 'badge-notice', general: 'badge-general' };
+
+  // Load departments from Firestore
+  async function loadDepts() {
+    try {
+      const snap = await getDoc(doc(db, 'meta', 'departments'));
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.list && data.list.length) departments = data.list;
+      }
+    } catch(e) { console.warn('dept load fail', e); }
+    renderTabs();
+  }
+
+  async function saveDepts() {
+    try {
+      await setDoc(doc(db, 'meta', 'departments'), { list: departments });
+    } catch(e) { console.warn('dept save fail', e); }
+  }
+
+  // Tabs
+  function renderTabs() {
+    const wrap = document.getElementById('tabs-wrap');
+    wrap.innerHTML = departments.map(d =>
+      `<div class="tab${activeTab === d ? ' active' : ''}" onclick="setTab('${d}')">${d}</div>`
+    ).join('') + `<div class="tab add-tab" onclick="showAddModal()">+ 과 추가</div>`;
+  }
+
+  window.setTab = function(d) {
+    activeTab = d;
+    renderTabs();
+    renderPosts();
+  };
+
+  // Type selector
+  window.setType = function(t) {
+    activeType = t;
+    document.querySelectorAll('.type-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.type === t);
+    });
+  };
+
+  // Format timestamp
+  function fmtTime(ts) {
+    if (!ts) return '방금';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    const now = new Date();
+    const diff = Math.floor((now - d) / 1000);
+    if (diff < 60) return '방금';
+    if (diff < 3600) return Math.floor(diff/60) + '분 전';
+    if (diff < 86400) return Math.floor(diff/3600) + '시간 전';
+    return `${d.getMonth()+1}/${d.getDate()}`;
+  }
+
+  // Render posts
+  function renderPosts() {
+    const container = document.getElementById('posts-container');
+    let list = activeTab === '전체'
+      ? allPosts
+      : allPosts.filter(p => p.dept === activeTab || p.dept === '전체');
+
+    // pinned first
+    list = [...list].sort((a,b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return 0;
+    });
+
+    if (!list.length) {
+      container.innerHTML = '<div class="empty">아직 게시물이 없습니다.<br>첫 번째 글을 올려보세요!</div>';
+      return;
+    }
+
+    container.innerHTML = list.map(p => `
+      <div class="post-card${p.pinned ? ' pinned' : ''}">
+        <div class="post-top">
+          ${p.pinned ? '<span class="pin-icon">📌</span>' : ''}
+          <span class="badge ${p.dept === '전체' ? 'badge-dept-all' : 'badge-dept'}">${p.dept}</span>
+          <span class="badge ${typeBadge[p.type] || 'badge-general'}">${typeLabels[p.type] || p.type}</span>
+          <span class="post-time">${fmtTime(p.createdAt)}</span>
+        </div>
+        <div class="post-content">${escHtml(p.content)}</div>
+        <div class="post-author">${escHtml(p.author || '익명')}</div>
+      </div>
+    `).join('');
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  }
+
+  // Real-time listener
+  const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
+  onSnapshot(q, snap => {
+    allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderPosts();
+  }, err => {
+    console.error(err);
+    showToast('연결 오류: Firestore 규칙 또는 설정을 확인해 주세요.');
+  });
+
+  // Submit post
+  window.submitPost = async function() {
+    const text = document.getElementById('compose-text').value.trim();
+    const author = document.getElementById('author-input').value.trim() || '익명';
+    if (!text) return;
+    const btn = document.getElementById('post-btn');
+    btn.disabled = true;
+    try {
+      await addDoc(collection(db, 'posts'), {
+        dept: activeTab === '전체' ? '전체' : activeTab,
+        type: activeType,
+        content: text,
+        author,
+        pinned: activeType === 'notice',
+        createdAt: serverTimestamp(),
+      });
+      document.getElementById('compose-text').value = '';
+      showToast('게시되었습니다!');
+    } catch(e) {
+      console.error(e);
+      showToast('오류가 발생했습니다. 콘솔을 확인해 주세요.');
+    } finally {
+      btn.disabled = false;
+    }
+  };
+
+  // Add dept modal
+  window.showAddModal = function() {
+    document.getElementById('modal-area').innerHTML = `
+      <div class="modal-bg" onclick="closeMod(event)">
+        <div class="modal">
+          <h3>과 추가</h3>
+          <input id="new-dept" placeholder="예: 피부과, 안과, 비뇨기과..." maxlength="10" />
+          <div class="modal-btns">
+            <button onclick="closeModal()">취소</button>
+            <button class="confirm" onclick="addDept()">추가</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('new-dept').focus();
+  };
+  window.closeMod = function(e) {
+    if (e.target.classList.contains('modal-bg')) closeModal();
+  };
+  window.closeModal = function() {
+    document.getElementById('modal-area').innerHTML = '';
+  };
+  window.addDept = async function() {
+    const val = document.getElementById('new-dept').value.trim();
+    if (val && !departments.includes(val)) {
+      departments.push(val);
+      await saveDepts();
+      activeTab = val;
+      renderTabs();
+      renderPosts();
+    }
+    closeModal();
+  };
+
+  // Toast
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+  window.showToast = showToast;
+
+  loadDepts();
+}
+</script>
+</body>
+</html>
