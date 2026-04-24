@@ -490,9 +490,15 @@ window.saveEdit = async function(id) {
   try {
     const updates = { content: val };
     if (editingType) updates.type = editingType;
-    await updateDoc(doc(db,'posts',id), updates);
+    // update allPosts locally so renderPosts reflects the change immediately
+    const idx = allPosts.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      allPosts[idx] = { ...allPosts[idx], ...updates };
+    }
     editingId = null; editingType = null;
+    renderPosts();
     showToast('수정되었습니다');
+    await updateDoc(doc(db,'posts',id), updates);
   }
   catch(e) { showToast('오류가 발생했습니다'); }
 };
@@ -805,10 +811,7 @@ window.openLightbox = function(encoded) {
 // ── Real-time ──
 onSnapshot(query(collection(db,'posts'), orderBy('createdAt','desc')), snap => {
   allPosts = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-  if (editingId) {
-    // update allPosts but keep edit UI
-    return;
-  }
+  if (editingId) return;
   renderPosts();
 }, () => showToast('연결 오류 — Firestore 규칙을 확인해주세요'));
 
