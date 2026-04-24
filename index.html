@@ -50,8 +50,16 @@
     .tab:not(.active) .tab-menu-btn:hover { background: rgba(0,0,0,.08); }
 
     /* Compose */
-    .compose { background: var(--surface); border-top: 1.5px solid var(--border); border-radius: 0; padding: 1rem 1.25rem; position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; box-shadow: 0 -4px 20px rgba(0,0,0,.08); }
-    .compose-inner { max-width: 800px; margin: 0 auto; }
+    /* Compose - collapsed fab + expanded sheet */
+    .compose-fab { position: fixed; bottom: 1.4rem; right: 1.4rem; width: 52px; height: 52px; border-radius: 50%; background: var(--blue); color: #fff; border: none; font-size: 24px; cursor: pointer; z-index: 40; box-shadow: 0 4px 16px rgba(26,95,168,.4); display: flex; align-items: center; justify-content: center; transition: transform .15s, box-shadow .15s; font-family: inherit; }
+    .compose-fab:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(26,95,168,.5); }
+    .compose-fab:active { transform: scale(.95); }
+    .compose-sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,.25); z-index: 41; opacity: 0; pointer-events: none; transition: opacity .25s; }
+    .compose-sheet-bg.open { opacity: 1; pointer-events: all; }
+    .compose { background: var(--surface); border-radius: 20px 20px 0 0; padding: 0; position: fixed; bottom: 0; left: 0; right: 0; z-index: 42; box-shadow: 0 -4px 32px rgba(0,0,0,.12); transform: translateY(100%); transition: transform .3s cubic-bezier(.32,.72,0,1); }
+    .compose.open { transform: translateY(0); }
+    .compose-handle { width: 36px; height: 4px; background: var(--border-h); border-radius: 2px; margin: 10px auto 0; }
+    .compose-inner { max-width: 800px; margin: 0 auto; padding: 12px 1.25rem 1.25rem; }
     .compose-lbl { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 10px; }
     .compose textarea { width: 100%; resize: none; border: 1px solid var(--border); border-radius: var(--rs); padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--surface2); min-height: 78px; outline: none; transition: border-color .13s; line-height: 1.6; }
     .compose textarea:focus { border-color: var(--blue); }
@@ -298,6 +306,7 @@ function renderTabs() {
 window.setTab = function(d) {
   activeTab = d; activeType = 'tip';
   pendingImgs = []; editingId = null;
+  closeCompose();
   renderTabs(); renderCompose(); renderPosts();
 };
 
@@ -341,7 +350,10 @@ function renderCompose() {
 
   if (activeTab === '스케줄') {
     area.innerHTML = `
-      <div class="compose">
+      <div class="compose-sheet-bg" id="compose-bg" onclick="closeCompose()"></div>
+      <button class="compose-fab" onclick="openCompose()">🖼️</button>
+      <div class="compose" id="compose-box">
+        <div class="compose-handle"></div>
         <div class="compose-inner">
           <div class="compose-lbl">스케줄 이미지 업로드</div>
           <div class="prev-wrap" id="prev-wrap"></div>
@@ -359,7 +371,9 @@ function renderCompose() {
             <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
           </div>
         </div>
-      </div>`; return;
+      </div>`;
+    document.querySelector('.main').style.paddingBottom = '5rem';
+    return;
   }
 
   area.innerHTML = `
@@ -435,7 +449,7 @@ window.submitPost = async function() {
       for (const img of pendingImgs) {
         await addDoc(collection(db,'posts'), { dept:'스케줄', type:'schedule', content:img.name, images:[img.dataUrl], author, important:false, createdAt:serverTimestamp() });
       }
-      pendingImgs=[]; renderPreviews(); showToast('업로드 완료!');
+      pendingImgs=[]; renderPreviews(); closeCompose(); showToast('업로드 완료!');
     } catch(e) { showToast('오류가 발생했습니다'); } finally { btn.disabled=false; }
     return;
   }
@@ -444,7 +458,7 @@ window.submitPost = async function() {
   btn.disabled = true;
   try {
     await addDoc(collection(db,'posts'), { dept:activeTab, type:activeType, content:text, images:[], author, important:false, createdAt:serverTimestamp() });
-    document.getElementById('compose-text').value = ''; showToast('게시되었습니다!');
+    document.getElementById('compose-text').value = ''; closeCompose(); showToast('게시되었습니다!');
   } catch(e) { showToast('오류가 발생했습니다'); } finally { btn.disabled=false; }
 };
 
@@ -856,6 +870,17 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 window.showToast = showToast;
+
+// ── Compose sheet ──
+window.openCompose = function() {
+  document.getElementById('compose-box')?.classList.add('open');
+  document.getElementById('compose-bg')?.classList.add('open');
+  setTimeout(() => document.getElementById('compose-text')?.focus(), 300);
+};
+window.closeCompose = function() {
+  document.getElementById('compose-box')?.classList.remove('open');
+  document.getElementById('compose-bg')?.classList.remove('open');
+};
 
 // ── Splash ──
 window.enterApp = function(tab) {
