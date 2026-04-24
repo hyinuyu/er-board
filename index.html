@@ -171,7 +171,6 @@
       .compose-foot { flex-direction: column; align-items: flex-start; }
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 <div id="app">
@@ -611,9 +610,9 @@ function renderPosts() {
                 <div class="step-title">QR코드를 스캔하세요</div>
                 <div class="step-desc">카메라로 QR코드를 찍으면 바로 접속됩니다. 캡처해서 카톡으로 보내도 돼요!</div>
                 <div style="margin-top:12px;text-align:center;">
-                  <canvas id="qr-canvas" style="border-radius:12px;border:1px solid var(--border);"></canvas>
+                  <img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://hyinuyu.github.io/er-board/&bgcolor=ffffff&color=1a1a1a&qzone=2" width="200" height="200" style="border-radius:12px;border:1px solid var(--border);display:block;margin:0 auto;" alt="QR코드" />
                   <div style="margin-top:8px;">
-                    <button onclick="downloadQR()" style="padding:6px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);font-size:13px;font-family:inherit;cursor:pointer;color:var(--text2);">📥 QR코드 저장</button>
+                    <a href="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://hyinuyu.github.io/er-board/&bgcolor=ffffff&color=1a1a1a&qzone=2" download="er-board-qr.png" style="display:inline-block;padding:6px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);font-size:13px;font-family:inherit;cursor:pointer;color:var(--text2);text-decoration:none;">📥 QR코드 저장</a>
                   </div>
                 </div>
               </div>
@@ -732,50 +731,9 @@ window.toggleGuide = function(hdr) {
   const isOpen = hdr.classList.contains('open');
   hdr.classList.toggle('open', !isOpen);
   body.classList.toggle('open', !isOpen);
-  // generate QR if share section just opened
-  if (!isOpen) setTimeout(generateQR, 50);
 };
 
 const APP_URL = 'https://hyinuyu.github.io/er-board/';
-
-function generateQR() {
-  const canvas = document.getElementById('qr-canvas');
-  if (!canvas || canvas.dataset.done) return;
-  canvas.dataset.done = '1';
-  canvas.width = 0; canvas.height = 0;
-  // clear previous
-  const wrap = document.createElement('div');
-  new QRCode(wrap, {
-    text: APP_URL,
-    width: 200, height: 200,
-    colorDark: '#1a1a1a', colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.M
-  });
-  setTimeout(() => {
-    const img = wrap.querySelector('img') || wrap.querySelector('canvas');
-    const size = 200;
-    canvas.width = size; canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0,0,size,size);
-    if (img.tagName === 'CANVAS') {
-      ctx.drawImage(img, 0, 0, size, size);
-    } else {
-      const tmp = new Image();
-      tmp.onload = () => ctx.drawImage(tmp, 0, 0, size, size);
-      tmp.src = img.src;
-    }
-  }, 100);
-}
-
-window.downloadQR = function() {
-  const canvas = document.getElementById('qr-canvas');
-  if (!canvas) return;
-  const a = document.createElement('a');
-  a.download = 'er-board-qr.png';
-  a.href = canvas.toDataURL('image/png');
-  a.click();
-};
 
 window.copyUrl = function() {
   navigator.clipboard.writeText(APP_URL).then(() => showToast('링크가 복사되었습니다!'));
