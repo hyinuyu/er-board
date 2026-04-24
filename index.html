@@ -344,58 +344,53 @@ window.deleteTab = async function(dept) {
 // ── Compose ──
 function renderCompose() {
   const area = document.getElementById('compose-area');
+  document.querySelector('.main').style.paddingBottom = '5rem';
 
-  if (activeTab === '사용방법' || activeTab === '중요') { area.innerHTML = ''; return; }
-
-
-  if (activeTab === '스케줄') {
-    area.innerHTML = `
-      <div class="compose-sheet-bg" id="compose-bg" onclick="closeCompose()"></div>
-      <button class="compose-fab" onclick="openCompose()">🖼️</button>
-      <div class="compose" id="compose-box">
-        <div class="compose-handle"></div>
-        <div class="compose-inner">
-          <div class="compose-lbl">스케줄 이미지 업로드</div>
-          <div class="prev-wrap" id="prev-wrap"></div>
-          <div class="img-upload-area" id="upload-zone"
-            onclick="document.getElementById('file-in').click()"
-            ondragover="event.preventDefault();this.classList.add('drag-over')"
-            ondragleave="this.classList.remove('drag-over')"
-            ondrop="handleDrop(event)">
-            <div class="upload-icon">🖼️</div>
-            <div class="upload-hint">클릭하거나 이미지를 드래그하세요</div>
-            <div class="upload-hint2">JPG, PNG (자동 압축 적용)</div>
-          </div>
-          <input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
-          <div class="compose-foot" style="justify-content:flex-end;">
-            <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
-          </div>
-        </div>
-      </div>`;
-    document.querySelector('.main').style.paddingBottom = '5rem';
+  if (activeTab === '사용방법' || activeTab === '중요') {
+    area.innerHTML = '';
+    document.querySelector('.main').style.paddingBottom = '2rem';
     return;
   }
 
-  area.innerHTML = `
-    <div class="compose">
-      <div class="compose-lbl">새 게시물 — ${activeTab}</div>
-      <textarea id="compose-text" placeholder="공유할 내용을 입력하세요..."></textarea>
-      <div class="compose-foot">
-        <div class="type-row">
-          <button class="tbtn active" data-type="tip"      onclick="setType('tip')">정보공유</button>
-          <button class="tbtn"        data-type="protocol" onclick="setType('protocol')">프로토콜</button>
-          <button class="tbtn"        data-type="notice"   onclick="setType('notice')">공지</button>
-          <button class="tbtn"        data-type="general"  onclick="setType('general')">일반</button>
-        </div>
-        <button class="post-btn" id="post-btn" onclick="submitPost()">게시</button>
+  const isSchedule = activeTab === '스케줄';
+
+  const innerHtml = isSchedule ? `
+    <div class="compose-lbl">스케줄 이미지 업로드</div>
+    <div class="prev-wrap" id="prev-wrap"></div>
+    <div class="img-upload-area" id="upload-zone"
+      onclick="document.getElementById('file-in').click()"
+      ondragover="event.preventDefault();this.classList.add('drag-over')"
+      ondragleave="this.classList.remove('drag-over')"
+      ondrop="handleDrop(event)">
+      <div class="upload-icon">🖼️</div>
+      <div class="upload-hint">클릭하거나 이미지를 드래그하세요</div>
+      <div class="upload-hint2">JPG, PNG (자동 압축 적용)</div>
+    </div>
+    <input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
+    <div class="compose-foot" style="justify-content:flex-end;">
+      <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
+    </div>` : `
+    <div class="compose-lbl">새 게시물 — ${activeTab}</div>
+    <textarea id="compose-text" placeholder="공유할 내용을 입력하세요..." rows="3"></textarea>
+    <div class="compose-foot">
+      <div class="type-row">
+        <button class="tbtn active" data-type="tip"      onclick="setType('tip')">정보공유</button>
+        <button class="tbtn"        data-type="protocol" onclick="setType('protocol')">프로토콜</button>
+        <button class="tbtn"        data-type="notice"   onclick="setType('notice')">공지</button>
+        <button class="tbtn"        data-type="general"  onclick="setType('general')">일반</button>
       </div>
+      <button class="post-btn" id="post-btn" onclick="submitPost()">게시</button>
     </div>`;
+
+  area.innerHTML = `
+    <div class="compose-sheet-bg" id="compose-bg" onclick="closeCompose()"></div>
+    <button class="compose-fab" onclick="openCompose()">${isSchedule ? '🖼️' : '✏️'}</button>
+    <div class="compose" id="compose-box">
+      <div class="compose-handle"></div>
+      <div class="compose-inner">${innerHtml}</div>
+    </div>`;
+
   activeType = 'tip';
-  requestAnimationFrame(() => {
-    const c = document.querySelector('.compose');
-    const main = document.querySelector('.main');
-    if (c && main) main.style.paddingBottom = (c.offsetHeight + 16) + 'px';
-  });
 }
 
 window.setType = function(t) {
