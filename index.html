@@ -4,437 +4,151 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>응급의학과 담벼락</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #f5f4f0;
-      --surface: #ffffff;
-      --surface2: #f9f8f5;
-      --border: rgba(0,0,0,0.08);
-      --border-hover: rgba(0,0,0,0.16);
-      --text: #1a1a1a;
-      --text2: #6b6b6b;
-      --text3: #aaaaaa;
-      --blue: #1a5fa8;
-      --blue-light: #e8f0fb;
-      --blue-text: #0d3d6e;
-      --red: #c0392b;
-      --red-light: #fdecea;
-      --red-text: #7b1a12;
-      --green: #1a7a55;
-      --green-light: #e4f5ee;
-      --green-text: #0d4a32;
-      --amber: #9a6200;
-      --amber-light: #fef6e4;
-      --amber-text: #5c3a00;
-      --purple: #5a3eb0;
-      --purple-light: #eeebfc;
-      --purple-text: #2e1d6b;
-      --gray-light: #f0efe9;
-      --gray-text: #444;
-      --radius: 12px;
-      --radius-sm: 8px;
+      --bg: #f5f4f0; --surface: #fff; --surface2: #f9f8f5;
+      --border: rgba(0,0,0,0.08); --border-h: rgba(0,0,0,0.16);
+      --text: #1a1a1a; --text2: #6b6b6b; --text3: #aaa;
+      --blue: #1a5fa8; --blue-l: #e8f0fb; --blue-t: #0d3d6e;
+      --red: #c0392b; --red-l: #fdecea; --red-t: #7b1a12;
+      --green: #1a7a55; --green-l: #e4f5ee; --green-t: #0d4a32;
+      --amber: #9a6200; --amber-l: #fef6e4; --amber-t: #5c3a00;
+      --purple: #5a3eb0; --purple-l: #eeebfc; --purple-t: #2e1d6b;
+      --gray-l: #f0efe9; --gray-t: #444;
+      --r: 12px; --rs: 8px;
     }
+    body { font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    body {
-      font-family: 'Pretendard', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    .hdr { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 50; }
+    .hdr-in { max-width: 800px; margin: 0 auto; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+    .hdr h1 { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,.2); }
+    .dot-label { font-size: 12px; color: var(--text2); margin-left: 6px; }
 
-    /* ── Header ── */
-    .header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 1.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .header-inner {
-      max-width: 780px;
-      margin: 0 auto;
-      height: 58px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .header h1 {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-    }
-    .header-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
-    .header-right { display: flex; align-items: center; gap: 8px; }
-    .online-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 0 2px rgba(34,197,94,0.2);
-    }
-    .online-label { font-size: 12px; color: var(--text2); }
+    .main { max-width: 800px; margin: 0 auto; padding: 1.25rem 1.25rem 5rem; }
 
-    /* ── Layout ── */
-    .main {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 1.25rem 1.25rem 4rem;
-    }
-
-    /* ── Tabs ── */
-    .tabs-wrap {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 1.1rem;
-    }
-    .tab {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text2);
-      transition: all 0.13s;
-      user-select: none;
-    }
-    .tab:hover { border-color: var(--border-hover); color: var(--text); }
+    .tabs-wrap { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+    .tab { display: inline-flex; align-items: center; gap: 4px; padding: 6px 13px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text2); transition: all .13s; user-select: none; white-space: nowrap; }
+    .tab:hover { border-color: var(--border-h); color: var(--text); }
     .tab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
-    .tab.add-tab {
-      border-style: dashed;
-      color: var(--text3);
-      background: transparent;
-    }
-    .tab.add-tab:hover { color: var(--text2); border-color: var(--border-hover); }
+    .tab.add-tab { border-style: dashed; color: var(--text3); background: transparent; }
+    .tab.add-tab:hover { color: var(--text2); border-color: var(--border-h); }
+    .tab-menu-btn { font-size: 11px; line-height: 1; padding: 1px 4px; border-radius: 4px; cursor: pointer; transition: background .12s; }
+    .tab.active .tab-menu-btn:hover { background: rgba(255,255,255,.25); }
+    .tab:not(.active) .tab-menu-btn { color: var(--text3); }
+    .tab:not(.active) .tab-menu-btn:hover { background: rgba(0,0,0,.06); color: var(--text2); }
 
-    /* ── Compose ── */
-    .compose {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.1rem;
-    }
-    .compose-header {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text3);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .compose textarea {
-      width: 100%;
-      resize: none;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      font-size: 14px;
-      font-family: inherit;
-      color: var(--text);
-      background: var(--surface2);
-      min-height: 80px;
-      outline: none;
-      transition: border-color 0.13s;
-      line-height: 1.6;
-    }
+    .compose { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; margin-bottom: 1rem; }
+    .compose-lbl { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 10px; }
+    .compose textarea { width: 100%; resize: none; border: 1px solid var(--border); border-radius: var(--rs); padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--surface2); min-height: 78px; outline: none; transition: border-color .13s; line-height: 1.6; }
     .compose textarea:focus { border-color: var(--blue); }
     .compose textarea::placeholder { color: var(--text3); }
-    .compose-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 10px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .compose-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 8px; }
     .type-row { display: flex; gap: 5px; flex-wrap: wrap; }
-    .type-btn {
-      padding: 4px 11px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text2);
-      transition: all 0.12s;
-      font-family: inherit;
-    }
-    .type-btn:hover { border-color: var(--border-hover); }
-    .type-btn.active[data-type="tip"]      { background: var(--blue-light);   color: var(--blue-text);   border-color: #b3ccee; }
-    .type-btn.active[data-type="protocol"] { background: var(--green-light);  color: var(--green-text);  border-color: #a8dcc5; }
-    .type-btn.active[data-type="notice"]   { background: var(--red-light);    color: var(--red-text);    border-color: #f0b9b4; }
-    .type-btn.active[data-type="general"]  { background: var(--gray-light);   color: var(--gray-text);   border-color: #ccc; }
-    .author-input {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 6px 10px;
-      font-size: 13px;
-      font-family: inherit;
-      color: var(--text);
-      background: var(--surface2);
-      outline: none;
-      width: 90px;
-      transition: border-color 0.13s;
-    }
-    .author-input:focus { border-color: var(--blue); }
-    .post-btn {
-      padding: 7px 22px;
-      background: var(--blue);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      transition: opacity 0.13s;
-    }
-    .post-btn:hover { opacity: 0.85; }
-    .post-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .tbtn { padding: 4px 11px; border-radius: 12px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text2); transition: all .12s; font-family: inherit; }
+    .tbtn.active[data-type="tip"]      { background: var(--blue-l);   color: var(--blue-t);   border-color: #b3ccee; }
+    .tbtn.active[data-type="protocol"] { background: var(--green-l);  color: var(--green-t);  border-color: #a8dcc5; }
+    .tbtn.active[data-type="notice"]   { background: var(--red-l);    color: var(--red-t);    border-color: #f0b9b4; }
+    .tbtn.active[data-type="general"]  { background: var(--gray-l);   color: var(--gray-t);   border-color: #ccc; }
+    .author-in { border: 1px solid var(--border); border-radius: var(--rs); padding: 6px 10px; font-size: 13px; font-family: inherit; color: var(--text); background: var(--surface2); outline: none; width: 90px; transition: border-color .13s; }
+    .author-in:focus { border-color: var(--blue); }
+    .post-btn { padding: 7px 22px; background: var(--blue); color: #fff; border: none; border-radius: var(--rs); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .13s; }
+    .post-btn:hover { opacity: .85; }
+    .post-btn:disabled { opacity: .45; cursor: not-allowed; }
 
-    /* ── Posts ── */
+    .img-upload-area { border: 2px dashed var(--border); border-radius: var(--rs); padding: 1.75rem 1rem; text-align: center; cursor: pointer; transition: all .13s; margin-bottom: 10px; }
+    .img-upload-area:hover, .img-upload-area.drag-over { border-color: var(--blue); background: var(--blue-l); }
+    .upload-icon { font-size: 26px; margin-bottom: 6px; }
+    .upload-hint { font-size: 13px; color: var(--text3); }
+    .upload-hint2 { font-size: 11px; color: var(--text3); margin-top: 2px; }
+    .img-preview-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: 8px; margin-bottom: 10px; }
+    .img-prev-item { position: relative; aspect-ratio: 1; border-radius: var(--rs); overflow: hidden; border: 1px solid var(--border); }
+    .img-prev-item img { width: 100%; height: 100%; object-fit: cover; }
+    .rm-btn { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; border: none; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+
     .posts { display: flex; flex-direction: column; gap: 8px; }
-    .post-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1rem 1.25rem;
-      transition: border-color 0.13s, transform 0.13s;
-    }
-    .post-card:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+    .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; transition: border-color .13s, transform .13s; }
+    .post-card:hover { border-color: var(--border-h); transform: translateY(-1px); }
     .post-card.pinned { border-left: 3px solid var(--blue); }
-    .post-top {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 9px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      padding: 2px 9px;
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
-    }
-    .badge-dept { background: var(--purple-light); color: var(--purple-text); }
-    .badge-dept-all { background: var(--gray-light); color: var(--gray-text); }
-    .badge-notice   { background: var(--red-light);   color: var(--red-text); }
-    .badge-protocol { background: var(--green-light); color: var(--green-text); }
-    .badge-tip      { background: var(--blue-light);  color: var(--blue-text); }
-    .badge-general  { background: var(--gray-light);  color: var(--gray-text); }
-    .pin-icon { font-size: 13px; }
-    .post-time { margin-left: auto; font-size: 11px; color: var(--text3); white-space: nowrap; }
-    .post-content {
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--text);
-    }
-    .post-author {
-      font-size: 12px;
-      color: var(--text3);
-      margin-top: 8px;
-    }
+    .post-top { display: flex; align-items: center; gap: 6px; margin-bottom: 9px; flex-wrap: wrap; }
+    .badge { padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+    .bd-dept   { background: var(--purple-l); color: var(--purple-t); }
+    .bd-all    { background: var(--gray-l);   color: var(--gray-t); }
+    .bd-notice { background: var(--red-l);    color: var(--red-t); }
+    .bd-proto  { background: var(--green-l);  color: var(--green-t); }
+    .bd-tip    { background: var(--blue-l);   color: var(--blue-t); }
+    .bd-gen    { background: var(--gray-l);   color: var(--gray-t); }
+    .bd-sched  { background: var(--amber-l);  color: var(--amber-t); }
+    .post-time { margin-left: auto; font-size: 11px; color: var(--text3); }
+    .post-content { font-size: 14px; line-height: 1.7; }
+    .post-author { font-size: 12px; color: var(--text3); margin-top: 8px; }
+    .post-imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap: 6px; margin-top: 10px; }
+    .post-imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--rs); cursor: pointer; border: 1px solid var(--border); transition: opacity .13s; }
+    .post-imgs img:hover { opacity: .85; }
 
-    /* ── Empty ── */
-    .empty {
-      text-align: center;
-      padding: 4rem 1rem;
-      color: var(--text3);
-      font-size: 14px;
-    }
+    .sched-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; }
+    .sched-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; cursor: pointer; transition: border-color .13s, transform .13s; }
+    .sched-card:hover { border-color: var(--border-h); transform: translateY(-1px); }
+    .sched-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+    .sched-info { padding: 8px 10px; }
+    .sched-name { font-size: 13px; font-weight: 500; }
+    .sched-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
 
-    /* ── Loading ── */
-    .loading {
-      text-align: center;
-      padding: 3rem;
-      color: var(--text3);
-      font-size: 14px;
-    }
+    .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); display: flex; align-items: center; justify-content: center; z-index: 500; cursor: zoom-out; }
+    .lightbox img { max-width: 92vw; max-height: 90vh; border-radius: var(--rs); object-fit: contain; }
 
-    /* ── Modal ── */
-    .modal-bg {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.3);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 200;
-      backdrop-filter: blur(2px);
-    }
-    .modal {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 1.5rem;
-      width: 300px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
-    .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; }
-    .modal input {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 9px 12px;
-      font-size: 14px;
-      font-family: inherit;
-      background: var(--surface2);
-      color: var(--text);
-      outline: none;
-      margin-bottom: 1rem;
-      transition: border-color 0.13s;
-    }
-    .modal input:focus { border-color: var(--blue); }
-    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
-    .modal-btns button {
-      padding: 7px 18px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      font-family: inherit;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text2);
-      transition: all 0.12s;
-    }
-    .modal-btns .confirm {
-      background: var(--blue);
-      color: #fff;
-      border-color: var(--blue);
-    }
+    .empty { text-align: center; padding: 4rem 1rem; color: var(--text3); font-size: 14px; }
+    .loading { text-align: center; padding: 3rem; color: var(--text3); font-size: 14px; }
 
-    /* ── Toast ── */
-    .toast {
-      position: fixed;
-      bottom: 1.5rem; left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      background: #1a1a1a;
-      color: #fff;
-      padding: 9px 20px;
-      border-radius: 20px;
-      font-size: 13px;
-      opacity: 0;
-      transition: all 0.2s;
-      pointer-events: none;
-      z-index: 300;
-    }
+    .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(10px); background: #1a1a1a; color: #fff; padding: 9px 20px; border-radius: 20px; font-size: 13px; opacity: 0; transition: all .2s; pointer-events: none; z-index: 400; white-space: nowrap; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── Config screen ── */
-    #config-screen {
-      max-width: 500px;
-      margin: 5rem auto;
-      padding: 2rem;
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-    }
-    #config-screen h2 { font-size: 18px; font-weight: 600; margin-bottom: 0.5rem; }
-    #config-screen p { font-size: 14px; color: var(--text2); margin-bottom: 1.5rem; line-height: 1.6; }
-    .config-field { margin-bottom: 1rem; }
-    .config-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 4px; letter-spacing: 0.3px; }
-    .config-field input {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 9px 12px;
-      font-size: 13px;
-      font-family: 'Pretendard', monospace;
-      background: var(--surface2);
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.13s;
-    }
-    .config-field input:focus { border-color: var(--blue); }
-    .config-save {
-      width: 100%;
-      padding: 10px;
-      background: var(--blue);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: inherit;
-      margin-top: 0.5rem;
-    }
-    .config-note {
-      font-size: 12px;
-      color: var(--text3);
-      margin-top: 1rem;
-      line-height: 1.6;
-    }
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(2px); }
+    .modal { background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); padding: 1.5rem; width: 300px; box-shadow: 0 8px 32px rgba(0,0,0,.12); }
+    .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; }
+    .modal input { width: 100%; border: 1px solid var(--border); border-radius: var(--rs); padding: 9px 12px; font-size: 14px; font-family: inherit; background: var(--surface2); color: var(--text); outline: none; margin-bottom: 1rem; transition: border-color .13s; }
+    .modal input:focus { border-color: var(--blue); }
+    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; }
+    .modal-btns button { padding: 7px 16px; border-radius: var(--rs); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; border: 1px solid var(--border); background: transparent; color: var(--text2); }
+    .modal-btns .confirm { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .modal-btns .danger  { background: var(--red);  color: #fff; border-color: var(--red); }
 
     @media (max-width: 600px) {
-      .main { padding: 1rem 0.85rem 4rem; }
-      .header { padding: 0 0.85rem; }
-      .compose-footer { flex-direction: column; align-items: flex-start; }
+      .main { padding: 1rem .85rem 5rem; }
+      .hdr  { padding: 0 .85rem; }
+      .compose-foot { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
-
-<!-- Config screen shown if no Firebase config -->
 <div id="app">
-  <header class="header">
-    <div class="header-inner">
-      <div>
-        <h1>응급의학과 담벼락</h1>
-      </div>
-      <div class="header-right">
-        <div class="online-dot"></div>
-        <span class="online-label" id="online-label">실시간 연결됨</span>
+  <header class="hdr">
+    <div class="hdr-in">
+      <h1>응급의학과 담벼락</h1>
+      <div style="display:flex;align-items:center;">
+        <div class="dot"></div>
+        <span class="dot-label">실시간 연결됨</span>
       </div>
     </div>
   </header>
-
   <main class="main">
     <div class="tabs-wrap" id="tabs-wrap"></div>
-
-    <div class="compose">
-      <div class="compose-header">새 게시물</div>
-      <textarea id="compose-text" placeholder="오늘 정형외과에서 연락 온 내용, 협진 프로토콜, 공지사항 등을 공유하세요..."></textarea>
-      <div class="compose-footer">
-        <div class="type-row" id="type-row">
-          <button class="type-btn active" data-type="tip" onclick="setType('tip')">정보공유</button>
-          <button class="type-btn" data-type="protocol" onclick="setType('protocol')">프로토콜</button>
-          <button class="type-btn" data-type="notice" onclick="setType('notice')">공지</button>
-          <button class="type-btn" data-type="general" onclick="setType('general')">일반</button>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input class="author-input" id="author-input" placeholder="이름/닉네임" maxlength="10" />
-          <button class="post-btn" id="post-btn" onclick="submitPost()">게시</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="posts" id="posts-container">
-      <div class="loading">불러오는 중...</div>
-    </div>
+    <div id="compose-area"></div>
+    <div id="posts-container"><div class="loading">불러오는 중...</div></div>
   </main>
 </div>
-
 <div class="toast" id="toast"></div>
 <div id="modal-area"></div>
 
-<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import {
   getFirestore, collection, addDoc, onSnapshot,
-  query, orderBy, serverTimestamp, doc, setDoc, getDoc, deleteDoc
+  query, orderBy, serverTimestamp, doc, setDoc, getDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ── Config management ──
 const firebaseConfig = {
   apiKey: "AIzaSyC_TNvySuxMUU6PIJ8jE1KiQkeBY9ogRbU",
   authDomain: "er-board.firebaseapp.com",
@@ -444,193 +158,341 @@ const firebaseConfig = {
   appId: "1:639170610173:web:c9b699638023c012aa4f94"
 };
 
-startApp(firebaseConfig);
+const db = getFirestore(initializeApp(firebaseConfig));
 
-// ── App ──
-function startApp(config) {
-  document.getElementById('app').style.display = 'block';
+// ── State ──
+const FIXED = ['전체공지', '스케줄'];
+let depts      = ['전체공지', '스케줄', '정형외과', '신경외과', '내과', '외과', '산부인과'];
+let activeTab  = '전체공지';
+let activeType = 'notice';
+let allPosts   = [];
+let pendingImgs = [];
 
-  const app = initializeApp(config);
-  const db = getFirestore(app);
+const typeLabels = { tip:'정보공유', protocol:'프로토콜', notice:'공지', general:'일반' };
+const typeBadge  = { tip:'bd-tip', protocol:'bd-proto', notice:'bd-notice', general:'bd-gen' };
 
-  // State
-  let activeTab = '전체';
-  let activeType = 'tip';
-  let departments = ['전체', '정형외과', '신경외과', '내과', '외과', '산부인과'];
-  let allPosts = [];
-
-  const typeLabels   = { tip: '정보공유', protocol: '프로토콜', notice: '공지', general: '일반' };
-  const typeBadge    = { tip: 'badge-tip', protocol: 'badge-protocol', notice: 'badge-notice', general: 'badge-general' };
-
-  // Load departments from Firestore
-  async function loadDepts() {
-    try {
-      const snap = await getDoc(doc(db, 'meta', 'departments'));
-      if (snap.exists()) {
-        const data = snap.data();
-        if (data.list && data.list.length) departments = data.list;
-      }
-    } catch(e) { console.warn('dept load fail', e); }
-    renderTabs();
-  }
-
-  async function saveDepts() {
-    try {
-      await setDoc(doc(db, 'meta', 'departments'), { list: departments });
-    } catch(e) { console.warn('dept save fail', e); }
-  }
-
-  // Tabs
-  function renderTabs() {
-    const wrap = document.getElementById('tabs-wrap');
-    wrap.innerHTML = departments.map(d =>
-      `<div class="tab${activeTab === d ? ' active' : ''}" onclick="setTab('${d}')">${d}</div>`
-    ).join('') + `<div class="tab add-tab" onclick="showAddModal()">+ 과 추가</div>`;
-  }
-
-  window.setTab = function(d) {
-    activeTab = d;
-    renderTabs();
-    renderPosts();
-  };
-
-  // Type selector
-  window.setType = function(t) {
-    activeType = t;
-    document.querySelectorAll('.type-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.type === t);
-    });
-  };
-
-  // Format timestamp
-  function fmtTime(ts) {
-    if (!ts) return '방금';
-    const d = ts.toDate ? ts.toDate() : new Date(ts);
-    const now = new Date();
-    const diff = Math.floor((now - d) / 1000);
-    if (diff < 60) return '방금';
-    if (diff < 3600) return Math.floor(diff/60) + '분 전';
-    if (diff < 86400) return Math.floor(diff/3600) + '시간 전';
-    return `${d.getMonth()+1}/${d.getDate()}`;
-  }
-
-  // Render posts
-  function renderPosts() {
-    const container = document.getElementById('posts-container');
-    let list = activeTab === '전체'
-      ? allPosts
-      : allPosts.filter(p => p.dept === activeTab || p.dept === '전체');
-
-    // pinned first
-    list = [...list].sort((a,b) => {
-      if (a.pinned && !b.pinned) return -1;
-      if (!a.pinned && b.pinned) return 1;
-      return 0;
-    });
-
-    if (!list.length) {
-      container.innerHTML = '<div class="empty">아직 게시물이 없습니다.<br>첫 번째 글을 올려보세요!</div>';
-      return;
+// ── Dept persistence ──
+async function loadDepts() {
+  try {
+    const snap = await getDoc(doc(db, 'meta', 'departments'));
+    if (snap.exists() && snap.data().list?.length) {
+      depts = snap.data().list;
+      FIXED.forEach(f => { if (!depts.includes(f)) depts.unshift(f); });
     }
+  } catch(e) {}
+  renderTabs(); renderCompose();
+}
+async function saveDepts() {
+  try { await setDoc(doc(db, 'meta', 'departments'), { list: depts }); } catch(e) {}
+}
 
-    container.innerHTML = list.map(p => `
-      <div class="post-card${p.pinned ? ' pinned' : ''}">
-        <div class="post-top">
-          ${p.pinned ? '<span class="pin-icon">📌</span>' : ''}
-          <span class="badge ${p.dept === '전체' ? 'badge-dept-all' : 'badge-dept'}">${p.dept}</span>
-          <span class="badge ${typeBadge[p.type] || 'badge-general'}">${typeLabels[p.type] || p.type}</span>
-          <span class="post-time">${fmtTime(p.createdAt)}</span>
+// ── Tabs ──
+function renderTabs() {
+  document.getElementById('tabs-wrap').innerHTML =
+    depts.map(d => {
+      const active = d === activeTab ? ' active' : '';
+      const editBtn = FIXED.includes(d) ? '' :
+        `<span class="tab-menu-btn" onclick="event.stopPropagation();showTabMenu('${d}')">✎</span>`;
+      return `<div class="tab${active}" onclick="setTab('${d}')">${d}${editBtn}</div>`;
+    }).join('') +
+    `<div class="tab add-tab" onclick="showAddModal()">+ 과 추가</div>`;
+}
+
+window.setTab = function(d) {
+  activeTab  = d;
+  activeType = d === '전체공지' ? 'notice' : 'tip';
+  pendingImgs = [];
+  renderTabs(); renderCompose(); renderPosts();
+};
+
+// ── Tab edit/delete ──
+window.showTabMenu = function(dept) {
+  document.getElementById('modal-area').innerHTML = `
+    <div class="modal-bg" onclick="closeMod(event)">
+      <div class="modal">
+        <h3>「${dept}」 탭</h3>
+        <input id="tab-rename" value="${dept}" placeholder="탭 이름" maxlength="12" />
+        <div class="modal-btns">
+          <button class="danger" onclick="deleteTab('${dept}')">삭제</button>
+          <button onclick="closeModal()">취소</button>
+          <button class="confirm" onclick="renameTab('${dept}')">이름 수정</button>
         </div>
-        <div class="post-content">${escHtml(p.content)}</div>
-        <div class="post-author">${escHtml(p.author || '익명')}</div>
       </div>
-    `).join('');
-  }
+    </div>`;
+  document.getElementById('tab-rename').focus();
+};
 
-  function escHtml(s) {
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-  }
+window.renameTab = async function(old) {
+  const val = document.getElementById('tab-rename').value.trim();
+  if (!val || val === old) { closeModal(); return; }
+  if (depts.includes(val)) { showToast('이미 있는 탭 이름이에요'); return; }
+  depts[depts.indexOf(old)] = val;
+  if (activeTab === old) activeTab = val;
+  await saveDepts();
+  closeModal(); renderTabs(); renderCompose();
+};
 
-  // Real-time listener
-  const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
-  onSnapshot(q, snap => {
-    allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderPosts();
-  }, err => {
-    console.error(err);
-    showToast('연결 오류: Firestore 규칙 또는 설정을 확인해 주세요.');
-  });
+window.deleteTab = async function(dept) {
+  if (!confirm(`「${dept}」 탭을 삭제할까요?`)) return;
+  depts = depts.filter(d => d !== dept);
+  if (activeTab === dept) activeTab = depts[0];
+  await saveDepts();
+  closeModal(); renderTabs(); renderCompose(); renderPosts();
+};
 
-  // Submit post
-  window.submitPost = async function() {
-    const text = document.getElementById('compose-text').value.trim();
-    const author = document.getElementById('author-input').value.trim() || '익명';
-    if (!text) return;
-    const btn = document.getElementById('post-btn');
-    btn.disabled = true;
-    try {
-      await addDoc(collection(db, 'posts'), {
-        dept: activeTab === '전체' ? '전체' : activeTab,
-        type: activeType,
-        content: text,
-        author,
-        pinned: activeType === 'notice',
-        createdAt: serverTimestamp(),
-      });
-      document.getElementById('compose-text').value = '';
-      showToast('게시되었습니다!');
-    } catch(e) {
-      console.error(e);
-      showToast('오류가 발생했습니다. 콘솔을 확인해 주세요.');
-    } finally {
-      btn.disabled = false;
-    }
-  };
+// ── Compose ──
+function renderCompose() {
+  const isSchedule = activeTab === '스케줄';
+  const isNotice   = activeTab === '전체공지';
+  const area = document.getElementById('compose-area');
 
-  // Add dept modal
-  window.showAddModal = function() {
-    document.getElementById('modal-area').innerHTML = `
-      <div class="modal-bg" onclick="closeMod(event)">
-        <div class="modal">
-          <h3>과 추가</h3>
-          <input id="new-dept" placeholder="예: 피부과, 안과, 비뇨기과..." maxlength="10" />
-          <div class="modal-btns">
-            <button onclick="closeModal()">취소</button>
-            <button class="confirm" onclick="addDept()">추가</button>
-          </div>
+  if (isSchedule) {
+    area.innerHTML = `
+      <div class="compose">
+        <div class="compose-lbl">스케줄 이미지 업로드</div>
+        <div class="img-preview-wrap" id="prev-wrap"></div>
+        <div class="img-upload-area" id="upload-zone"
+          onclick="document.getElementById('file-in').click()"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="handleDrop(event)">
+          <div class="upload-icon">🖼️</div>
+          <div class="upload-hint">클릭하거나 이미지를 드래그하세요</div>
+          <div class="upload-hint2">JPG, PNG (자동 압축 적용)</div>
+        </div>
+        <input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
+        <div class="compose-foot">
+          <input class="author-in" id="author-input" placeholder="이름/닉네임" maxlength="10" />
+          <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
         </div>
       </div>`;
-    document.getElementById('new-dept').focus();
-  };
-  window.closeMod = function(e) {
-    if (e.target.classList.contains('modal-bg')) closeModal();
-  };
-  window.closeModal = function() {
-    document.getElementById('modal-area').innerHTML = '';
-  };
-  window.addDept = async function() {
-    const val = document.getElementById('new-dept').value.trim();
-    if (val && !departments.includes(val)) {
-      departments.push(val);
-      await saveDepts();
-      activeTab = val;
-      renderTabs();
-      renderPosts();
-    }
-    closeModal();
-  };
-
-  // Toast
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+    return;
   }
-  window.showToast = showToast;
 
-  loadDepts();
+  const typeBtns = isNotice
+    ? `<button class="tbtn active" data-type="notice" onclick="setType('notice')">공지</button>`
+    : `<button class="tbtn active" data-type="tip"      onclick="setType('tip')">정보공유</button>
+       <button class="tbtn"        data-type="protocol" onclick="setType('protocol')">프로토콜</button>
+       <button class="tbtn"        data-type="notice"   onclick="setType('notice')">공지</button>
+       <button class="tbtn"        data-type="general"  onclick="setType('general')">일반</button>`;
+
+  area.innerHTML = `
+    <div class="compose">
+      <div class="compose-lbl">새 게시물</div>
+      <textarea id="compose-text" placeholder="공유할 내용을 입력하세요..."></textarea>
+      <div class="compose-foot">
+        <div class="type-row">${typeBtns}</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input class="author-in" id="author-input" placeholder="이름/닉네임" maxlength="10" />
+          <button class="post-btn" id="post-btn" onclick="submitPost()">게시</button>
+        </div>
+      </div>
+    </div>`;
 }
+
+window.setType = function(t) {
+  activeType = t;
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.toggle('active', b.dataset.type === t));
+};
+
+// ── Image compress ──
+window.handleFiles = function(files) { Array.from(files).forEach(compressAndAdd); };
+window.handleDrop  = function(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone')?.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+};
+
+function compressAndAdd(file) {
+  if (!file.type.startsWith('image/')) { showToast('이미지 파일만 가능해요'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 900;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        if (w > h) { h = Math.round(h*MAX/w); w = MAX; }
+        else       { w = Math.round(w*MAX/h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let q = .85, dataUrl = canvas.toDataURL('image/jpeg', q);
+      while (dataUrl.length > 750000 && q > .3) { q -= .1; dataUrl = canvas.toDataURL('image/jpeg', q); }
+      if (dataUrl.length > 900000) { showToast('이미지가 너무 커요'); return; }
+      pendingImgs.push({ dataUrl, name: file.name });
+      renderPreviews();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderPreviews() {
+  const wrap = document.getElementById('prev-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = pendingImgs.map((img, i) => `
+    <div class="img-prev-item">
+      <img src="${img.dataUrl}" />
+      <button class="rm-btn" onclick="removeImg(${i})">✕</button>
+    </div>`).join('');
+}
+window.removeImg = function(i) { pendingImgs.splice(i, 1); renderPreviews(); };
+
+// ── Submit ──
+window.submitPost = async function() {
+  const btn    = document.getElementById('post-btn');
+  const author = (document.getElementById('author-input')?.value || '').trim() || '익명';
+
+  if (activeTab === '스케줄') {
+    if (!pendingImgs.length) { showToast('이미지를 먼저 추가해주세요'); return; }
+    btn.disabled = true;
+    try {
+      for (const img of pendingImgs) {
+        await addDoc(collection(db, 'posts'), {
+          dept: '스케줄', type: 'schedule',
+          content: img.name, images: [img.dataUrl],
+          author, pinned: false, createdAt: serverTimestamp()
+        });
+      }
+      pendingImgs = [];
+      renderPreviews();
+      showToast('업로드 완료!');
+    } catch(e) { showToast('오류가 발생했습니다'); }
+    finally { btn.disabled = false; }
+    return;
+  }
+
+  const text = (document.getElementById('compose-text')?.value || '').trim();
+  if (!text) { showToast('내용을 입력해주세요'); return; }
+  btn.disabled = true;
+  try {
+    await addDoc(collection(db, 'posts'), {
+      dept: activeTab, type: activeType, content: text, images: [],
+      author, pinned: activeType === 'notice', createdAt: serverTimestamp()
+    });
+    document.getElementById('compose-text').value = '';
+    showToast('게시되었습니다!');
+  } catch(e) { showToast('오류가 발생했습니다'); }
+  finally { btn.disabled = false; }
+};
+
+// ── Render posts ──
+function fmtTime(ts) {
+  if (!ts) return '방금';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const s = Math.floor((Date.now()-d)/1000);
+  if (s < 60) return '방금';
+  if (s < 3600) return Math.floor(s/60)+'분 전';
+  if (s < 86400) return Math.floor(s/3600)+'시간 전';
+  return `${d.getMonth()+1}/${d.getDate()}`;
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function renderPosts() {
+  const container  = document.getElementById('posts-container');
+  const isSchedule = activeTab === '스케줄';
+  const isNotice   = activeTab === '전체공지';
+
+  let list = isNotice   ? allPosts.filter(p => p.type === 'notice')
+           : isSchedule ? allPosts.filter(p => p.dept === '스케줄')
+           :              allPosts.filter(p => p.dept === activeTab);
+
+  list = [...list].sort((a,b) => (b.pinned?1:0)-(a.pinned?1:0));
+
+  if (!list.length) {
+    container.innerHTML = '<div class="empty">아직 게시물이 없습니다.<br>첫 번째 글을 올려보세요!</div>';
+    return;
+  }
+
+  if (isSchedule) {
+    container.innerHTML = `<div class="sched-grid">${list.map(p=>`
+      <div class="sched-card" onclick="openLightbox('${encodeURIComponent(p.images?.[0]||'')}')">
+        <img src="${p.images?.[0]||''}" alt="${esc(p.content)}" loading="lazy" />
+        <div class="sched-info">
+          <div class="sched-name">${esc(p.content)}</div>
+          <div class="sched-meta">${esc(p.author)} · ${fmtTime(p.createdAt)}</div>
+        </div>
+      </div>`).join('')}</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(p => {
+    const deptBadge = (p.dept==='전체공지'||p.dept==='전체')
+      ? `<span class="badge bd-all">전체공지</span>`
+      : `<span class="badge bd-dept">${esc(p.dept)}</span>`;
+    const tb = typeBadge[p.type]||'bd-gen';
+    const tl = typeLabels[p.type]||p.type;
+    const imgs = (p.images||[]).filter(Boolean);
+    return `
+      <div class="post-card${p.pinned?' pinned':''}">
+        <div class="post-top">
+          ${p.pinned?'<span>📌</span>':''}
+          ${deptBadge}
+          <span class="badge ${tb}">${tl}</span>
+          <span class="post-time">${fmtTime(p.createdAt)}</span>
+        </div>
+        <div class="post-content">${esc(p.content)}</div>
+        ${imgs.length?`<div class="post-imgs">${imgs.map(src=>`<img src="${src}" onclick="openLightbox('${encodeURIComponent(src)}')" loading="lazy" />`).join('')}</div>`:''}
+        <div class="post-author">${esc(p.author||'익명')}</div>
+      </div>`;
+  }).join('');
+}
+
+// ── Lightbox ──
+window.openLightbox = function(encoded) {
+  const lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.innerHTML = `<img src="${decodeURIComponent(encoded)}" />`;
+  lb.onclick   = () => lb.remove();
+  document.body.appendChild(lb);
+};
+
+// ── Real-time ──
+onSnapshot(query(collection(db,'posts'), orderBy('createdAt','desc')), snap => {
+  allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderPosts();
+}, err => { showToast('연결 오류 — Firestore 규칙을 확인해주세요'); });
+
+// ── Add modal ──
+window.showAddModal = function() {
+  document.getElementById('modal-area').innerHTML = `
+    <div class="modal-bg" onclick="closeMod(event)">
+      <div class="modal">
+        <h3>과 추가</h3>
+        <input id="new-dept" placeholder="예: 피부과, 안과, 비뇨기과..." maxlength="12" />
+        <div class="modal-btns">
+          <button onclick="closeModal()">취소</button>
+          <button class="confirm" onclick="addDept()">추가</button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('new-dept').focus();
+};
+window.addDept = async function() {
+  const val = document.getElementById('new-dept').value.trim();
+  if (!val) { closeModal(); return; }
+  if (depts.includes(val)) { showToast('이미 있는 탭이에요'); return; }
+  depts.push(val);
+  await saveDepts();
+  activeTab = val; activeType = 'tip';
+  closeModal(); renderTabs(); renderCompose(); renderPosts();
+};
+
+window.closeMod   = e => { if (e.target.classList.contains('modal-bg')) closeModal(); };
+window.closeModal = () => { document.getElementById('modal-area').innerHTML = ''; };
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+window.showToast = showToast;
+
+loadDepts();
 </script>
 </body>
 </html>
