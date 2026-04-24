@@ -21,6 +21,7 @@
     }
     body { font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
+    /* Header */
     .hdr { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 50; }
     .hdr-in { max-width: 800px; margin: 0 auto; height: 56px; display: flex; align-items: center; justify-content: space-between; }
     .hdr h1 { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
@@ -29,6 +30,7 @@
 
     .main { max-width: 800px; margin: 0 auto; padding: 1.25rem 1.25rem 5rem; }
 
+    /* Tabs */
     .tabs-wrap { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
     .tab { display: inline-flex; align-items: center; gap: 4px; padding: 6px 13px; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: var(--text2); transition: all .13s; user-select: none; white-space: nowrap; }
     .tab:hover { border-color: var(--border-h); color: var(--text); }
@@ -40,6 +42,7 @@
     .tab:not(.active) .tab-menu-btn { color: var(--text3); }
     .tab:not(.active) .tab-menu-btn:hover { background: rgba(0,0,0,.06); color: var(--text2); }
 
+    /* Compose */
     .compose { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; margin-bottom: 1rem; }
     .compose-lbl { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 10px; }
     .compose textarea { width: 100%; resize: none; border: 1px solid var(--border); border-radius: var(--rs); padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--surface2); min-height: 78px; outline: none; transition: border-color .13s; line-height: 1.6; }
@@ -48,34 +51,35 @@
     .compose-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 8px; }
     .type-row { display: flex; gap: 5px; flex-wrap: wrap; }
     .tbtn { padding: 4px 11px; border-radius: 12px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text2); transition: all .12s; font-family: inherit; }
-    .tbtn.active[data-type="tip"]      { background: var(--blue-l);   color: var(--blue-t);   border-color: #b3ccee; }
-    .tbtn.active[data-type="protocol"] { background: var(--green-l);  color: var(--green-t);  border-color: #a8dcc5; }
-    .tbtn.active[data-type="notice"]   { background: var(--red-l);    color: var(--red-t);    border-color: #f0b9b4; }
-    .tbtn.active[data-type="general"]  { background: var(--gray-l);   color: var(--gray-t);   border-color: #ccc; }
+    .tbtn.active[data-type="tip"]      { background: var(--blue-l);  color: var(--blue-t);  border-color: #b3ccee; }
+    .tbtn.active[data-type="protocol"] { background: var(--green-l); color: var(--green-t); border-color: #a8dcc5; }
+    .tbtn.active[data-type="notice"]   { background: var(--red-l);   color: var(--red-t);   border-color: #f0b9b4; }
+    .tbtn.active[data-type="general"]  { background: var(--gray-l);  color: var(--gray-t);  border-color: #ccc; }
     .author-in { border: 1px solid var(--border); border-radius: var(--rs); padding: 6px 10px; font-size: 13px; font-family: inherit; color: var(--text); background: var(--surface2); outline: none; width: 90px; transition: border-color .13s; }
     .author-in:focus { border-color: var(--blue); }
     .post-btn { padding: 7px 22px; background: var(--blue); color: #fff; border: none; border-radius: var(--rs); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .13s; }
     .post-btn:hover { opacity: .85; }
     .post-btn:disabled { opacity: .45; cursor: not-allowed; }
 
+    /* Image upload */
     .img-upload-area { border: 2px dashed var(--border); border-radius: var(--rs); padding: 1.75rem 1rem; text-align: center; cursor: pointer; transition: all .13s; margin-bottom: 10px; }
     .img-upload-area:hover, .img-upload-area.drag-over { border-color: var(--blue); background: var(--blue-l); }
     .upload-icon { font-size: 26px; margin-bottom: 6px; }
-    .upload-hint { font-size: 13px; color: var(--text3); }
+    .upload-hint  { font-size: 13px; color: var(--text3); }
     .upload-hint2 { font-size: 11px; color: var(--text3); margin-top: 2px; }
-    .img-preview-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: 8px; margin-bottom: 10px; }
-    .img-prev-item { position: relative; aspect-ratio: 1; border-radius: var(--rs); overflow: hidden; border: 1px solid var(--border); }
-    .img-prev-item img { width: 100%; height: 100%; object-fit: cover; }
+    .prev-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: 8px; margin-bottom: 10px; }
+    .prev-item { position: relative; aspect-ratio: 1; border-radius: var(--rs); overflow: hidden; border: 1px solid var(--border); }
+    .prev-item img { width: 100%; height: 100%; object-fit: cover; }
     .rm-btn { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; border: none; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; }
 
+    /* Posts */
     .posts { display: flex; flex-direction: column; gap: 8px; }
-    .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; transition: border-color .13s, transform .13s; }
-    .post-card:hover { border-color: var(--border-h); transform: translateY(-1px); }
-    .post-card.pinned { border-left: 3px solid var(--blue); }
+    .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; transition: border-color .13s; }
+    .post-card.important { border-left: 3px solid #f59e0b; }
     .post-top { display: flex; align-items: center; gap: 6px; margin-bottom: 9px; flex-wrap: wrap; }
     .badge { padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600; }
     .bd-dept   { background: var(--purple-l); color: var(--purple-t); }
-    .bd-all    { background: var(--gray-l);   color: var(--gray-t); }
+    .bd-er     { background: #fef3c7;         color: #92400e; }
     .bd-notice { background: var(--red-l);    color: var(--red-t); }
     .bd-proto  { background: var(--green-l);  color: var(--green-t); }
     .bd-tip    { background: var(--blue-l);   color: var(--blue-t); }
@@ -88,23 +92,45 @@
     .post-imgs img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--rs); cursor: pointer; border: 1px solid var(--border); transition: opacity .13s; }
     .post-imgs img:hover { opacity: .85; }
 
+    /* Post actions */
+    .post-actions { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+    .action-btn { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text2); font-family: inherit; transition: all .12s; }
+    .action-btn:hover { border-color: var(--border-h); color: var(--text); background: var(--surface2); }
+    .action-btn.important-on { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+    .action-btn.del { color: var(--red-t); border-color: transparent; }
+    .action-btn.del:hover { background: var(--red-l); border-color: #f0b9b4; }
+    .action-btn.edit-on { color: var(--blue-t); border-color: #b3ccee; background: var(--blue-l); }
+
+    /* Inline edit */
+    .edit-box { margin-top: 8px; }
+    .edit-box textarea { width: 100%; resize: none; border: 1px solid var(--blue); border-radius: var(--rs); padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--surface2); outline: none; line-height: 1.6; min-height: 70px; }
+    .edit-actions { display: flex; gap: 6px; justify-content: flex-end; margin-top: 6px; }
+    .edit-actions button { padding: 5px 14px; border-radius: var(--rs); font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; border: 1px solid var(--border); background: transparent; color: var(--text2); }
+    .edit-actions .save-btn { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    /* Schedule */
     .sched-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; }
     .sched-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; cursor: pointer; transition: border-color .13s, transform .13s; }
     .sched-card:hover { border-color: var(--border-h); transform: translateY(-1px); }
     .sched-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
-    .sched-info { padding: 8px 10px; }
+    .sched-info { padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; }
     .sched-name { font-size: 13px; font-weight: 500; }
     .sched-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+    .sched-del { font-size: 12px; color: var(--text3); background: none; border: none; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .sched-del:hover { background: var(--red-l); color: var(--red-t); }
 
+    /* Lightbox */
     .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); display: flex; align-items: center; justify-content: center; z-index: 500; cursor: zoom-out; }
     .lightbox img { max-width: 92vw; max-height: 90vh; border-radius: var(--rs); object-fit: contain; }
 
     .empty { text-align: center; padding: 4rem 1rem; color: var(--text3); font-size: 14px; }
     .loading { text-align: center; padding: 3rem; color: var(--text3); font-size: 14px; }
 
+    /* Toast */
     .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(10px); background: #1a1a1a; color: #fff; padding: 9px 20px; border-radius: 20px; font-size: 13px; opacity: 0; transition: all .2s; pointer-events: none; z-index: 400; white-space: nowrap; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* Modal */
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(2px); }
     .modal { background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); padding: 1.5rem; width: 300px; box-shadow: 0 8px 32px rgba(0,0,0,.12); }
     .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; }
@@ -146,7 +172,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import {
   getFirestore, collection, addDoc, onSnapshot,
-  query, orderBy, serverTimestamp, doc, setDoc, getDoc
+  query, orderBy, serverTimestamp, doc, setDoc, getDoc, updateDoc, deleteDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -161,15 +187,16 @@ const firebaseConfig = {
 const db = getFirestore(initializeApp(firebaseConfig));
 
 // ── State ──
-const FIXED = ['전체공지', '스케줄'];
-let depts      = ['전체공지', '스케줄', '정형외과', '신경외과', '내과', '외과', '산부인과'];
-let activeTab  = '전체공지';
-let activeType = 'notice';
+const FIXED = ['중요', '응급의학과', '스케줄'];
+let depts      = ['중요', '응급의학과', '스케줄', '정형외과', '신경외과', '내과', '외과', '산부인과'];
+let activeTab  = '응급의학과';
+let activeType = 'tip';
 let allPosts   = [];
 let pendingImgs = [];
+let editingId   = null;
 
-const typeLabels = { tip:'정보공유', protocol:'프로토콜', notice:'공지', general:'일반' };
-const typeBadge  = { tip:'bd-tip', protocol:'bd-proto', notice:'bd-notice', general:'bd-gen' };
+const typeLabels = { tip:'정보공유', protocol:'프로토콜', notice:'공지', general:'일반', schedule:'스케줄' };
+const typeBadge  = { tip:'bd-tip', protocol:'bd-proto', notice:'bd-notice', general:'bd-gen', schedule:'bd-sched' };
 
 // ── Dept persistence ──
 async function loadDepts() {
@@ -190,18 +217,19 @@ async function saveDepts() {
 function renderTabs() {
   document.getElementById('tabs-wrap').innerHTML =
     depts.map(d => {
-      const active = d === activeTab ? ' active' : '';
-      const editBtn = FIXED.includes(d) ? '' :
+      const isActive = d === activeTab;
+      const editBtn  = FIXED.includes(d) ? '' :
         `<span class="tab-menu-btn" onclick="event.stopPropagation();showTabMenu('${d}')">✎</span>`;
-      return `<div class="tab${active}" onclick="setTab('${d}')">${d}${editBtn}</div>`;
+      return `<div class="tab${isActive?' active':''}" onclick="setTab('${d}')">${d}${editBtn}</div>`;
     }).join('') +
     `<div class="tab add-tab" onclick="showAddModal()">+ 과 추가</div>`;
 }
 
 window.setTab = function(d) {
   activeTab  = d;
-  activeType = d === '전체공지' ? 'notice' : 'tip';
+  activeType = d === '응급의학과' ? 'tip' : 'tip';
   pendingImgs = [];
+  editingId   = null;
   renderTabs(); renderCompose(); renderPosts();
 };
 
@@ -211,7 +239,7 @@ window.showTabMenu = function(dept) {
     <div class="modal-bg" onclick="closeMod(event)">
       <div class="modal">
         <h3>「${dept}」 탭</h3>
-        <input id="tab-rename" value="${dept}" placeholder="탭 이름" maxlength="12" />
+        <input id="tab-rename" value="${dept}" maxlength="12" />
         <div class="modal-btns">
           <button class="danger" onclick="deleteTab('${dept}')">삭제</button>
           <button onclick="closeModal()">취소</button>
@@ -221,7 +249,6 @@ window.showTabMenu = function(dept) {
     </div>`;
   document.getElementById('tab-rename').focus();
 };
-
 window.renameTab = async function(old) {
   const val = document.getElementById('tab-rename').value.trim();
   if (!val || val === old) { closeModal(); return; }
@@ -231,7 +258,6 @@ window.renameTab = async function(old) {
   await saveDepts();
   closeModal(); renderTabs(); renderCompose();
 };
-
 window.deleteTab = async function(dept) {
   if (!confirm(`「${dept}」 탭을 삭제할까요?`)) return;
   depts = depts.filter(d => d !== dept);
@@ -243,14 +269,23 @@ window.deleteTab = async function(dept) {
 // ── Compose ──
 function renderCompose() {
   const isSchedule = activeTab === '스케줄';
-  const isNotice   = activeTab === '전체공지';
+  const isImportant = activeTab === '중요';
   const area = document.getElementById('compose-area');
+
+  if (isImportant) {
+    area.innerHTML = `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1rem;text-align:center;">
+        <div style="font-size:20px;margin-bottom:6px;">⭐</div>
+        <div style="font-size:14px;color:var(--text2);">각 탭의 게시물에서 ⭐ 버튼을 누르면 여기에 모입니다</div>
+      </div>`;
+    return;
+  }
 
   if (isSchedule) {
     area.innerHTML = `
       <div class="compose">
         <div class="compose-lbl">스케줄 이미지 업로드</div>
-        <div class="img-preview-wrap" id="prev-wrap"></div>
+        <div class="prev-wrap" id="prev-wrap"></div>
         <div class="img-upload-area" id="upload-zone"
           onclick="document.getElementById('file-in').click()"
           ondragover="event.preventDefault();this.classList.add('drag-over')"
@@ -269,16 +304,15 @@ function renderCompose() {
     return;
   }
 
-  const typeBtns = isNotice
-    ? `<button class="tbtn active" data-type="notice" onclick="setType('notice')">공지</button>`
-    : `<button class="tbtn active" data-type="tip"      onclick="setType('tip')">정보공유</button>
-       <button class="tbtn"        data-type="protocol" onclick="setType('protocol')">프로토콜</button>
-       <button class="tbtn"        data-type="notice"   onclick="setType('notice')">공지</button>
-       <button class="tbtn"        data-type="general"  onclick="setType('general')">일반</button>`;
+  const typeBtns = `
+    <button class="tbtn active" data-type="tip"      onclick="setType('tip')">정보공유</button>
+    <button class="tbtn"        data-type="protocol" onclick="setType('protocol')">프로토콜</button>
+    <button class="tbtn"        data-type="notice"   onclick="setType('notice')">공지</button>
+    <button class="tbtn"        data-type="general"  onclick="setType('general')">일반</button>`;
 
   area.innerHTML = `
     <div class="compose">
-      <div class="compose-lbl">새 게시물</div>
+      <div class="compose-lbl">새 게시물 — ${activeTab}</div>
       <textarea id="compose-text" placeholder="공유할 내용을 입력하세요..."></textarea>
       <div class="compose-foot">
         <div class="type-row">${typeBtns}</div>
@@ -288,6 +322,7 @@ function renderCompose() {
         </div>
       </div>
     </div>`;
+  activeType = 'tip';
 }
 
 window.setType = function(t) {
@@ -295,14 +330,13 @@ window.setType = function(t) {
   document.querySelectorAll('.tbtn').forEach(b => b.classList.toggle('active', b.dataset.type === t));
 };
 
-// ── Image compress ──
+// ── Image handling ──
 window.handleFiles = function(files) { Array.from(files).forEach(compressAndAdd); };
 window.handleDrop  = function(e) {
   e.preventDefault();
   document.getElementById('upload-zone')?.classList.remove('drag-over');
   handleFiles(e.dataTransfer.files);
 };
-
 function compressAndAdd(file) {
   if (!file.type.startsWith('image/')) { showToast('이미지 파일만 가능해요'); return; }
   const reader = new FileReader();
@@ -328,12 +362,11 @@ function compressAndAdd(file) {
   };
   reader.readAsDataURL(file);
 }
-
 function renderPreviews() {
   const wrap = document.getElementById('prev-wrap');
   if (!wrap) return;
   wrap.innerHTML = pendingImgs.map((img, i) => `
-    <div class="img-prev-item">
+    <div class="prev-item">
       <img src="${img.dataUrl}" />
       <button class="rm-btn" onclick="removeImg(${i})">✕</button>
     </div>`).join('');
@@ -353,11 +386,10 @@ window.submitPost = async function() {
         await addDoc(collection(db, 'posts'), {
           dept: '스케줄', type: 'schedule',
           content: img.name, images: [img.dataUrl],
-          author, pinned: false, createdAt: serverTimestamp()
+          author, important: false, createdAt: serverTimestamp()
         });
       }
-      pendingImgs = [];
-      renderPreviews();
+      pendingImgs = []; renderPreviews();
       showToast('업로드 완료!');
     } catch(e) { showToast('오류가 발생했습니다'); }
     finally { btn.disabled = false; }
@@ -370,7 +402,7 @@ window.submitPost = async function() {
   try {
     await addDoc(collection(db, 'posts'), {
       dept: activeTab, type: activeType, content: text, images: [],
-      author, pinned: activeType === 'notice', createdAt: serverTimestamp()
+      author, important: false, createdAt: serverTimestamp()
     });
     document.getElementById('compose-text').value = '';
     showToast('게시되었습니다!');
@@ -378,7 +410,64 @@ window.submitPost = async function() {
   finally { btn.disabled = false; }
 };
 
-// ── Render posts ──
+// ── Post actions ──
+window.toggleImportant = async function(id, current) {
+  try {
+    await updateDoc(doc(db, 'posts', id), { important: !current });
+    showToast(!current ? '⭐ 중요 표시했습니다' : '중요 표시를 해제했습니다');
+  } catch(e) { showToast('오류가 발생했습니다'); }
+};
+
+window.deletePost = async function(id) {
+  if (!confirm('이 게시물을 삭제할까요?')) return;
+  try {
+    await deleteDoc(doc(db, 'posts', id));
+    showToast('삭제되었습니다');
+  } catch(e) { showToast('오류가 발생했습니다'); }
+};
+
+window.startEdit = function(id, content) {
+  editingId = id;
+  const card = document.getElementById('card-' + id);
+  const contentEl = card.querySelector('.post-content');
+  contentEl.innerHTML = `
+    <div class="edit-box">
+      <textarea id="edit-ta-${id}">${content}</textarea>
+      <div class="edit-actions">
+        <button onclick="cancelEdit('${id}')">취소</button>
+        <button class="save-btn" onclick="saveEdit('${id}')">저장</button>
+      </div>
+    </div>`;
+  const ta = document.getElementById('edit-ta-' + id);
+  ta.style.height = ta.scrollHeight + 'px';
+  ta.focus();
+};
+
+window.cancelEdit = function(id) {
+  editingId = null;
+  renderPosts();
+};
+
+window.saveEdit = async function(id) {
+  const val = (document.getElementById('edit-ta-' + id)?.value || '').trim();
+  if (!val) { showToast('내용을 입력해주세요'); return; }
+  try {
+    await updateDoc(doc(db, 'posts', id), { content: val });
+    editingId = null;
+    showToast('수정되었습니다');
+  } catch(e) { showToast('오류가 발생했습니다'); }
+};
+
+window.deleteSchedPost = async function(e, id) {
+  e.stopPropagation();
+  if (!confirm('이 스케줄을 삭제할까요?')) return;
+  try {
+    await deleteDoc(doc(db, 'posts', id));
+    showToast('삭제되었습니다');
+  } catch(e) { showToast('오류가 발생했습니다'); }
+};
+
+// ── Render ──
 function fmtTime(ts) {
   if (!ts) return '방금';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -395,13 +484,16 @@ function esc(s) {
 function renderPosts() {
   const container  = document.getElementById('posts-container');
   const isSchedule = activeTab === '스케줄';
-  const isNotice   = activeTab === '전체공지';
+  const isImportant = activeTab === '중요';
 
-  let list = isNotice   ? allPosts.filter(p => p.type === 'notice')
-           : isSchedule ? allPosts.filter(p => p.dept === '스케줄')
-           :              allPosts.filter(p => p.dept === activeTab);
+  let list = isImportant  ? allPosts.filter(p => p.important && p.type !== 'schedule')
+           : isSchedule   ? allPosts.filter(p => p.dept === '스케줄')
+           :                allPosts.filter(p => p.dept === activeTab);
 
-  list = [...list].sort((a,b) => (b.pinned?1:0)-(a.pinned?1:0));
+  // important first, then by time (already ordered by time from firestore)
+  if (!isImportant) {
+    list = [...list].sort((a,b) => (b.important?1:0)-(a.important?1:0));
+  }
 
   if (!list.length) {
     container.innerHTML = '<div class="empty">아직 게시물이 없습니다.<br>첫 번째 글을 올려보세요!</div>';
@@ -413,24 +505,31 @@ function renderPosts() {
       <div class="sched-card" onclick="openLightbox('${encodeURIComponent(p.images?.[0]||'')}')">
         <img src="${p.images?.[0]||''}" alt="${esc(p.content)}" loading="lazy" />
         <div class="sched-info">
-          <div class="sched-name">${esc(p.content)}</div>
-          <div class="sched-meta">${esc(p.author)} · ${fmtTime(p.createdAt)}</div>
+          <div>
+            <div class="sched-name">${esc(p.content)}</div>
+            <div class="sched-meta">${esc(p.author)} · ${fmtTime(p.createdAt)}</div>
+          </div>
+          <button class="sched-del" onclick="deleteSchedPost(event,'${p.id}')">✕</button>
         </div>
       </div>`).join('')}</div>`;
     return;
   }
 
   container.innerHTML = list.map(p => {
-    const deptBadge = (p.dept==='전체공지'||p.dept==='전체')
-      ? `<span class="badge bd-all">전체공지</span>`
-      : `<span class="badge bd-dept">${esc(p.dept)}</span>`;
+    const deptBadge = activeTab === '중요'
+      ? `<span class="badge bd-dept">${esc(p.dept)}</span>`
+      : p.dept === '응급의학과'
+        ? `<span class="badge bd-er">응급의학과</span>`
+        : `<span class="badge bd-dept">${esc(p.dept)}</span>`;
     const tb = typeBadge[p.type]||'bd-gen';
     const tl = typeLabels[p.type]||p.type;
     const imgs = (p.images||[]).filter(Boolean);
+    const isImpt = !!p.important;
+
     return `
-      <div class="post-card${p.pinned?' pinned':''}">
+      <div class="post-card${isImpt?' important':''}" id="card-${p.id}">
         <div class="post-top">
-          ${p.pinned?'<span>📌</span>':''}
+          ${isImpt ? '<span style="font-size:14px;">⭐</span>' : ''}
           ${deptBadge}
           <span class="badge ${tb}">${tl}</span>
           <span class="post-time">${fmtTime(p.createdAt)}</span>
@@ -438,6 +537,15 @@ function renderPosts() {
         <div class="post-content">${esc(p.content)}</div>
         ${imgs.length?`<div class="post-imgs">${imgs.map(src=>`<img src="${src}" onclick="openLightbox('${encodeURIComponent(src)}')" loading="lazy" />`).join('')}</div>`:''}
         <div class="post-author">${esc(p.author||'익명')}</div>
+        <div class="post-actions">
+          <button class="action-btn${isImpt?' important-on':''}" onclick="toggleImportant('${p.id}',${isImpt})">
+            ⭐ ${isImpt?'중요 해제':'중요'}
+          </button>
+          <button class="action-btn" onclick="startEdit('${p.id}', \`${(p.content||'').replace(/`/g,"'").replace(/\n/g,'\\n')}\`)">
+            ✏️ 수정
+          </button>
+          <button class="action-btn del" onclick="deletePost('${p.id}')">🗑 삭제</button>
+        </div>
       </div>`;
   }).join('');
 }
@@ -454,10 +562,11 @@ window.openLightbox = function(encoded) {
 // ── Real-time ──
 onSnapshot(query(collection(db,'posts'), orderBy('createdAt','desc')), snap => {
   allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  if (editingId) return; // don't re-render while editing
   renderPosts();
-}, err => { showToast('연결 오류 — Firestore 규칙을 확인해주세요'); });
+}, () => showToast('연결 오류 — Firestore 규칙을 확인해주세요'));
 
-// ── Add modal ──
+// ── Add tab modal ──
 window.showAddModal = function() {
   document.getElementById('modal-area').innerHTML = `
     <div class="modal-bg" onclick="closeMod(event)">
