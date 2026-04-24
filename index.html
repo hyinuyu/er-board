@@ -210,10 +210,10 @@ const firebaseConfig = {
 
 const db = getFirestore(initializeApp(firebaseConfig));
 
-const FIXED = ['중요', '응급의학과', '스케줄', '사용방법'];
-const FIXED_FRONT = ['중요', '응급의학과'];
+const FIXED = ['중요', '응급의학과', '입원환자', '스케줄', '사용방법'];
+const FIXED_FRONT = ['중요', '응급의학과', '입원환자'];
 const FIXED_BACK  = ['스케줄', '사용방법'];
-let depts     = ['중요', '응급의학과', '정형외과', '신경외과', '내과', '외과', '산부인과', '스케줄', '사용방법'];
+let depts     = ['중요', '응급의학과', '입원환자', '정형외과', '신경외과', '내과', '외과', '산부인과', '스케줄', '사용방법'];
 let activeTab = '응급의학과';
 let activeType = 'tip';
 let allPosts  = [];
