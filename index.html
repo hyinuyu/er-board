@@ -170,9 +170,48 @@
       .hdr  { padding: 0 .85rem; }
       .compose-foot { flex-direction: column; align-items: flex-start; }
     }
+
+    /* ── Splash ── */
+    .splash { position: fixed; inset: 0; background: linear-gradient(135deg, #e8f4fd 0%, #fef9f0 50%, #f0faf4 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; text-align: center; transition: opacity .4s, transform .4s; }
+    .splash.hide { opacity: 0; transform: scale(1.04); pointer-events: none; }
+    .splash-logo { font-size: 72px; margin-bottom: 1rem; animation: bounce 1.8s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .splash-title { font-size: 26px; font-weight: 600; color: #1a1a1a; letter-spacing: -.5px; margin-bottom: 6px; }
+    .splash-sub { font-size: 15px; color: #6b6b6b; margin-bottom: 2.5rem; }
+    .splash-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; max-width: 340px; margin-bottom: 2.5rem; }
+    .splash-card { background: #fff; border-radius: 16px; padding: 14px 10px; box-shadow: 0 2px 12px rgba(0,0,0,.07); display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: transform .15s, box-shadow .15s; border: 2px solid transparent; }
+    .splash-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+    .splash-card:active { transform: scale(.97); }
+    .splash-card .sc-icon { font-size: 28px; }
+    .splash-card .sc-label { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+    .splash-card .sc-desc { font-size: 11px; color: #aaa; }
+    .splash-card.c-blue  { border-color: #dbeafe; background: linear-gradient(135deg,#fff,#eff6ff); }
+    .splash-card.c-red   { border-color: #fee2e2; background: linear-gradient(135deg,#fff,#fef2f2); }
+    .splash-card.c-green { border-color: #dcfce7; background: linear-gradient(135deg,#fff,#f0fdf4); }
+    .splash-card.c-amber { border-color: #fef9c3; background: linear-gradient(135deg,#fff,#fefce8); }
+    .splash-card.c-purple{ border-color: #ede9fe; background: linear-gradient(135deg,#fff,#f5f3ff); }
+    .splash-card.c-pink  { border-color: #fce7f3; background: linear-gradient(135deg,#fff,#fdf2f8); }
+    .splash-enter { padding: 14px 40px; background: #1a5fa8; color: #fff; border: none; border-radius: 24px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; box-shadow: 0 4px 16px rgba(26,95,168,.35); transition: all .15s; }
+    .splash-enter:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,95,168,.45); }
+    .splash-enter:active { transform: scale(.97); }
+    .splash-notice { font-size: 11px; color: #bbb; margin-top: 14px; }
   </style>
 </head>
 <body>
+<div class="splash" id="splash">
+  <div class="splash-logo">🏥</div>
+  <div class="splash-title">응급의학과 담벼락</div>
+  <div class="splash-sub">우리끼리 공유하는 실시간 정보 게시판</div>
+  <div class="splash-cards">
+    <div class="splash-card c-blue"  onclick="enterApp('응급의학과')"><div class="sc-icon">🏥</div><div class="sc-label">응급의학과</div><div class="sc-desc">과 공지 · 정보</div></div>
+    <div class="splash-card c-red"   onclick="enterApp('중요')"><div class="sc-icon">⭐</div><div class="sc-label">중요</div><div class="sc-desc">중요 표시 모음</div></div>
+    <div class="splash-card c-green" onclick="enterApp('입원환자')"><div class="sc-icon">🛏️</div><div class="sc-label">입원환자</div><div class="sc-desc">입원 환자 정보</div></div>
+    <div class="splash-card c-amber" onclick="enterApp('스케줄')"><div class="sc-icon">🗓️</div><div class="sc-label">스케줄</div><div class="sc-desc">당직표 · 일정</div></div>
+  </div>
+  <button class="splash-enter" onclick="enterApp('응급의학과')">시작하기 →</button>
+  <div class="splash-notice">실시간 동기화 · Firebase 연결됨</div>
+</div>
+
 <div id="app">
   <header class="hdr">
     <div class="hdr-in">
@@ -790,6 +829,15 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 window.showToast = showToast;
+
+// ── Splash ──
+window.enterApp = function(tab) {
+  const splash = document.getElementById('splash');
+  splash.classList.add('hide');
+  setTimeout(() => { splash.style.display = 'none'; }, 400);
+  activeTab = tab;
+  renderTabs(); renderCompose(); renderPosts();
+};
 
 loadDepts();
 </script>
