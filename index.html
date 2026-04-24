@@ -258,6 +258,7 @@ let activeType = 'tip';
 let allPosts  = [];
 let pendingImgs = [];
 let editingId = null;
+let editingType = null;
 
 const typeLabels = { tip:'정보공유', protocol:'프로토콜', notice:'공지', general:'일반', schedule:'스케줄' };
 const typeBadge  = { tip:'bd-tip', protocol:'bd-proto', notice:'bd-notice', general:'bd-gen', schedule:'bd-sched' };
@@ -458,13 +459,18 @@ window.deleteSchedPost = async function(e, id) {
   try { await deleteDoc(doc(db,'posts',id)); showToast('삭제되었습니다'); }
   catch(e) { showToast('오류가 발생했습니다'); }
 };
-window.startEdit = function(id, content) {
+window.startEdit = function(id, currentContent, currentType) {
   editingId = id;
   const card = document.getElementById('card-'+id);
   if (!card) return;
+  const typeBtns = Object.entries(typeLabels)
+    .filter(([k]) => k !== 'schedule')
+    .map(([k,v]) => `<button class="tbtn${k===currentType?' active':''}" data-type="${k}" onclick="setEditType(this,'${k}')">${v}</button>`)
+    .join('');
   card.querySelector('.post-content').innerHTML = `
     <div class="edit-box">
-      <textarea id="edit-ta-${id}">${content}</textarea>
+      <div class="type-row" id="edit-type-row" style="margin-bottom:8px;">${typeBtns}</div>
+      <textarea id="edit-ta-${id}">${currentContent}</textarea>
       <div class="edit-actions">
         <button onclick="cancelEdit()">취소</button>
         <button class="save-btn" onclick="saveEdit('${id}')">저장</button>
@@ -473,11 +479,21 @@ window.startEdit = function(id, content) {
   const ta = document.getElementById('edit-ta-'+id);
   ta.style.height = ta.scrollHeight+'px'; ta.focus();
 };
-window.cancelEdit = function() { editingId=null; renderPosts(); };
+window.setEditType = function(btn, type) {
+  editingType = type;
+  document.querySelectorAll('#edit-type-row .tbtn').forEach(b => b.classList.toggle('active', b.dataset.type === type));
+};
+window.cancelEdit = function() { editingId=null; editingType=null; renderPosts(); };
 window.saveEdit = async function(id) {
   const val = (document.getElementById('edit-ta-'+id)?.value||'').trim();
   if (!val) { showToast('내용을 입력해주세요'); return; }
-  try { await updateDoc(doc(db,'posts',id), { content:val }); editingId=null; showToast('수정되었습니다'); }
+  try {
+    const updates = { content: val };
+    if (editingType) updates.type = editingType;
+    await updateDoc(doc(db,'posts',id), updates);
+    editingId = null; editingType = null;
+    showToast('수정되었습니다');
+  }
   catch(e) { showToast('오류가 발생했습니다'); }
 };
 
@@ -756,7 +772,7 @@ function renderPosts() {
         <div class="post-author">${fmtTime(p.createdAt)}</div>
         <div class="post-actions">
           <button class="action-btn${p.important?' imp-on':''}" onclick="toggleImportant('${p.id}',${!!p.important})">⭐ ${p.important?'중요 해제':'중요'}</button>
-          <button class="action-btn" onclick="startEdit('${p.id}',\`${(p.content||'').replace(/`/g,"'").replace(/\n/g,'\\n')}\`)">✏️ 수정</button>
+          <button class="action-btn" onclick="startEdit('${p.id}',\`${(p.content||'').replace(/`/g,"'").replace(/\n/g,'\\n')}\`,'${p.type}')">✏️ 수정</button>
           <button class="action-btn del" onclick="deletePost('${p.id}')">🗑 삭제</button>
         </div>
       </div>`;
@@ -789,7 +805,10 @@ window.openLightbox = function(encoded) {
 // ── Real-time ──
 onSnapshot(query(collection(db,'posts'), orderBy('createdAt','desc')), snap => {
   allPosts = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-  if (editingId) return;
+  if (editingId) {
+    // update allPosts but keep edit UI
+    return;
+  }
   renderPosts();
 }, () => showToast('연결 오류 — Firestore 규칙을 확인해주세요'));
 
