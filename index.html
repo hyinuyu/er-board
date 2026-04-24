@@ -384,31 +384,7 @@
 <body>
 
 <!-- Config screen shown if no Firebase config -->
-<div id="config-screen" style="display:none;">
-  <h2>🔥 Firebase 연결 설정</h2>
-  <p>처음 한 번만 설정하면 됩니다.<br>Firebase 프로젝트의 설정값을 입력해 주세요.</p>
-  <div class="config-field">
-    <label>API KEY</label>
-    <input id="cfg-apiKey" placeholder="AIzaSy..." />
-  </div>
-  <div class="config-field">
-    <label>AUTH DOMAIN</label>
-    <input id="cfg-authDomain" placeholder="your-project.firebaseapp.com" />
-  </div>
-  <div class="config-field">
-    <label>PROJECT ID</label>
-    <input id="cfg-projectId" placeholder="your-project-id" />
-  </div>
-  <div class="config-field">
-    <label>APP ID</label>
-    <input id="cfg-appId" placeholder="1:123456:web:abcdef..." />
-  </div>
-  <button class="config-save" onclick="saveConfig()">저장하고 시작하기</button>
-  <p class="config-note">입력한 설정값은 브라우저에만 저장되며, GitHub 코드에는 올라가지 않습니다.</p>
-</div>
-
-<!-- Main app (hidden until Firebase ready) -->
-<div id="app" style="display:none;">
+<div id="app">
   <header class="header">
     <div class="header-inner">
       <div>
@@ -459,34 +435,16 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 // ── Config management ──
-const CONFIG_KEY = 'er_board_firebase_config';
+const firebaseConfig = {
+  apiKey: "AIzaSyC_TNvySuxMUU6PIJ8jE1KiQkeBY9ogRbU",
+  authDomain: "er-board.firebaseapp.com",
+  projectId: "er-board",
+  storageBucket: "er-board.firebasestorage.app",
+  messagingSenderId: "639170610173",
+  appId: "1:639170610173:web:c9b699638023c012aa4f94"
+};
 
-function getConfig() {
-  try { return JSON.parse(localStorage.getItem(CONFIG_KEY)); } catch { return null; }
-}
-
-function saveConfig() {
-  const cfg = {
-    apiKey:     document.getElementById('cfg-apiKey').value.trim(),
-    authDomain: document.getElementById('cfg-authDomain').value.trim(),
-    projectId:  document.getElementById('cfg-projectId').value.trim(),
-    appId:      document.getElementById('cfg-appId').value.trim(),
-  };
-  if (!cfg.apiKey || !cfg.projectId) {
-    alert('API Key와 Project ID는 필수입니다.');
-    return;
-  }
-  localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg));
-  location.reload();
-}
-window.saveConfig = saveConfig;
-
-const firebaseConfig = getConfig();
-if (!firebaseConfig) {
-  document.getElementById('config-screen').style.display = 'block';
-} else {
-  startApp(firebaseConfig);
-}
+startApp(firebaseConfig);
 
 // ── App ──
 function startApp(config) {
