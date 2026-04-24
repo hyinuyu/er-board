@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>응급의학과 담벼락</title>
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="ER 담벼락" />
+  <meta name="theme-color" content="#1a5fa8" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,7 +28,6 @@
     }
     body { font-family: 'Pretendard', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* Header */
     .hdr { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 0; z-index: 50; }
     .hdr-in { max-width: 800px; margin: 0 auto; height: 56px; display: flex; align-items: center; justify-content: space-between; }
     .hdr h1 { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
@@ -79,12 +85,12 @@
     .post-top { display: flex; align-items: center; gap: 6px; margin-bottom: 9px; flex-wrap: wrap; }
     .badge { padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: 600; }
     .bd-dept   { background: var(--purple-l); color: var(--purple-t); }
-    .bd-er     { background: #fef3c7;         color: #92400e; }
-    .bd-notice { background: var(--red-l);    color: var(--red-t); }
-    .bd-proto  { background: var(--green-l);  color: var(--green-t); }
-    .bd-tip    { background: var(--blue-l);   color: var(--blue-t); }
-    .bd-gen    { background: var(--gray-l);   color: var(--gray-t); }
-    .bd-sched  { background: var(--amber-l);  color: var(--amber-t); }
+    .bd-er     { background: #fef3c7; color: #92400e; }
+    .bd-notice { background: var(--red-l);   color: var(--red-t); }
+    .bd-proto  { background: var(--green-l); color: var(--green-t); }
+    .bd-tip    { background: var(--blue-l);  color: var(--blue-t); }
+    .bd-gen    { background: var(--gray-l);  color: var(--gray-t); }
+    .bd-sched  { background: var(--amber-l); color: var(--amber-t); }
     .post-time { margin-left: auto; font-size: 11px; color: var(--text3); }
     .post-content { font-size: 14px; line-height: 1.7; }
     .post-author { font-size: 12px; color: var(--text3); margin-top: 8px; }
@@ -93,13 +99,12 @@
     .post-imgs img:hover { opacity: .85; }
 
     /* Post actions */
-    .post-actions { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+    .post-actions { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; }
     .action-btn { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text2); font-family: inherit; transition: all .12s; }
     .action-btn:hover { border-color: var(--border-h); color: var(--text); background: var(--surface2); }
-    .action-btn.important-on { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+    .action-btn.imp-on { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
     .action-btn.del { color: var(--red-t); border-color: transparent; }
     .action-btn.del:hover { background: var(--red-l); border-color: #f0b9b4; }
-    .action-btn.edit-on { color: var(--blue-t); border-color: #b3ccee; background: var(--blue-l); }
 
     /* Inline edit */
     .edit-box { margin-top: 8px; }
@@ -110,27 +115,46 @@
 
     /* Schedule */
     .sched-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 10px; }
-    .sched-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; cursor: pointer; transition: border-color .13s, transform .13s; }
+    .sched-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; transition: border-color .13s, transform .13s; }
     .sched-card:hover { border-color: var(--border-h); transform: translateY(-1px); }
-    .sched-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
-    .sched-info { padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; }
+    .sched-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; cursor: pointer; }
+    .sched-info { padding: 8px 10px; display: flex; align-items: flex-start; justify-content: space-between; }
     .sched-name { font-size: 13px; font-weight: 500; }
     .sched-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
-    .sched-del { font-size: 12px; color: var(--text3); background: none; border: none; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+    .sched-del { font-size: 12px; color: var(--text3); background: none; border: none; cursor: pointer; padding: 2px 6px; border-radius: 6px; flex-shrink: 0; }
     .sched-del:hover { background: var(--red-l); color: var(--red-t); }
 
     /* Lightbox */
     .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.88); display: flex; align-items: center; justify-content: center; z-index: 500; cursor: zoom-out; }
     .lightbox img { max-width: 92vw; max-height: 90vh; border-radius: var(--rs); object-fit: contain; }
 
+    /* ── Usage guide ── */
+    .guide { display: flex; flex-direction: column; gap: 14px; }
+    .guide-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    .guide-section-hdr { padding: 14px 18px; background: var(--surface2); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+    .guide-section-hdr .g-icon { font-size: 20px; }
+    .guide-section-hdr .g-title { font-size: 15px; font-weight: 600; }
+    .guide-section-hdr .g-arrow { margin-left: auto; font-size: 12px; color: var(--text3); transition: transform .2s; }
+    .guide-section-hdr.open .g-arrow { transform: rotate(180deg); }
+    .guide-body { padding: 18px; display: none; }
+    .guide-body.open { display: block; }
+    .guide-step { display: flex; gap: 12px; margin-bottom: 16px; }
+    .guide-step:last-child { margin-bottom: 0; }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step-content .step-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .step-content .step-desc { font-size: 13px; color: var(--text2); line-height: 1.65; }
+    .step-content .step-img { margin-top: 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--rs); padding: 14px 16px; font-size: 13px; color: var(--text2); line-height: 1.7; }
+    .step-content .step-img b { color: var(--text); font-weight: 600; }
+    .tip-box { background: var(--blue-l); border: 1px solid #b3ccee; border-radius: var(--rs); padding: 12px 14px; font-size: 13px; color: var(--blue-t); line-height: 1.65; margin-top: 12px; }
+    .url-box { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--rs); padding: 10px 14px; font-size: 13px; font-family: monospace; color: var(--blue-t); margin-top: 8px; word-break: break-all; }
+    .badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
     .empty { text-align: center; padding: 4rem 1rem; color: var(--text3); font-size: 14px; }
     .loading { text-align: center; padding: 3rem; color: var(--text3); font-size: 14px; }
 
-    /* Toast */
     .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(10px); background: #1a1a1a; color: #fff; padding: 9px 20px; border-radius: 20px; font-size: 13px; opacity: 0; transition: all .2s; pointer-events: none; z-index: 400; white-space: nowrap; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* Modal */
     .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.3); display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(2px); }
     .modal { background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); padding: 1.5rem; width: 300px; box-shadow: 0 8px 32px rgba(0,0,0,.12); }
     .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; }
@@ -186,14 +210,13 @@ const firebaseConfig = {
 
 const db = getFirestore(initializeApp(firebaseConfig));
 
-// ── State ──
-const FIXED = ['중요', '응급의학과', '스케줄'];
-let depts      = ['중요', '응급의학과', '스케줄', '정형외과', '신경외과', '내과', '외과', '산부인과'];
-let activeTab  = '응급의학과';
+const FIXED = ['중요', '응급의학과', '스케줄', '사용방법'];
+let depts     = ['중요', '응급의학과', '스케줄', '정형외과', '신경외과', '내과', '외과', '산부인과', '사용방법'];
+let activeTab = '응급의학과';
 let activeType = 'tip';
-let allPosts   = [];
+let allPosts  = [];
 let pendingImgs = [];
-let editingId   = null;
+let editingId = null;
 
 const typeLabels = { tip:'정보공유', protocol:'프로토콜', notice:'공지', general:'일반', schedule:'스케줄' };
 const typeBadge  = { tip:'bd-tip', protocol:'bd-proto', notice:'bd-notice', general:'bd-gen', schedule:'bd-sched' };
@@ -204,7 +227,11 @@ async function loadDepts() {
     const snap = await getDoc(doc(db, 'meta', 'departments'));
     if (snap.exists() && snap.data().list?.length) {
       depts = snap.data().list;
-      FIXED.forEach(f => { if (!depts.includes(f)) depts.unshift(f); });
+      FIXED.forEach(f => { if (!depts.includes(f)) depts.push(f); });
+      // ensure order: fixed first
+      const fixedList = FIXED.filter(f => depts.includes(f));
+      const rest = depts.filter(d => !FIXED.includes(d));
+      depts = [...fixedList, ...rest];
     }
   } catch(e) {}
   renderTabs(); renderCompose();
@@ -218,7 +245,7 @@ function renderTabs() {
   document.getElementById('tabs-wrap').innerHTML =
     depts.map(d => {
       const isActive = d === activeTab;
-      const editBtn  = FIXED.includes(d) ? '' :
+      const editBtn = FIXED.includes(d) ? '' :
         `<span class="tab-menu-btn" onclick="event.stopPropagation();showTabMenu('${d}')">✎</span>`;
       return `<div class="tab${isActive?' active':''}" onclick="setTab('${d}')">${d}${editBtn}</div>`;
     }).join('') +
@@ -226,10 +253,8 @@ function renderTabs() {
 }
 
 window.setTab = function(d) {
-  activeTab  = d;
-  activeType = d === '응급의학과' ? 'tip' : 'tip';
-  pendingImgs = [];
-  editingId   = null;
+  activeTab = d; activeType = 'tip';
+  pendingImgs = []; editingId = null;
   renderTabs(); renderCompose(); renderPosts();
 };
 
@@ -255,33 +280,27 @@ window.renameTab = async function(old) {
   if (depts.includes(val)) { showToast('이미 있는 탭 이름이에요'); return; }
   depts[depts.indexOf(old)] = val;
   if (activeTab === old) activeTab = val;
-  await saveDepts();
-  closeModal(); renderTabs(); renderCompose();
+  await saveDepts(); closeModal(); renderTabs(); renderCompose();
 };
 window.deleteTab = async function(dept) {
   if (!confirm(`「${dept}」 탭을 삭제할까요?`)) return;
   depts = depts.filter(d => d !== dept);
   if (activeTab === dept) activeTab = depts[0];
-  await saveDepts();
-  closeModal(); renderTabs(); renderCompose(); renderPosts();
+  await saveDepts(); closeModal(); renderTabs(); renderCompose(); renderPosts();
 };
 
 // ── Compose ──
 function renderCompose() {
-  const isSchedule = activeTab === '스케줄';
-  const isImportant = activeTab === '중요';
   const area = document.getElementById('compose-area');
 
-  if (isImportant) {
-    area.innerHTML = `
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1rem;text-align:center;">
-        <div style="font-size:20px;margin-bottom:6px;">⭐</div>
-        <div style="font-size:14px;color:var(--text2);">각 탭의 게시물에서 ⭐ 버튼을 누르면 여기에 모입니다</div>
-      </div>`;
-    return;
-  }
+  if (activeTab === '사용방법') { area.innerHTML = ''; return; }
+  if (activeTab === '중요')     { area.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1rem;text-align:center;">
+      <div style="font-size:22px;margin-bottom:6px;">⭐</div>
+      <div style="font-size:14px;color:var(--text2);">각 탭 게시물에서 ⭐ 버튼을 누르면 여기에 모입니다</div>
+    </div>`; return; }
 
-  if (isSchedule) {
+  if (activeTab === '스케줄') {
     area.innerHTML = `
       <div class="compose">
         <div class="compose-lbl">스케줄 이미지 업로드</div>
@@ -300,22 +319,20 @@ function renderCompose() {
           <input class="author-in" id="author-input" placeholder="이름/닉네임" maxlength="10" />
           <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
         </div>
-      </div>`;
-    return;
+      </div>`; return;
   }
-
-  const typeBtns = `
-    <button class="tbtn active" data-type="tip"      onclick="setType('tip')">정보공유</button>
-    <button class="tbtn"        data-type="protocol" onclick="setType('protocol')">프로토콜</button>
-    <button class="tbtn"        data-type="notice"   onclick="setType('notice')">공지</button>
-    <button class="tbtn"        data-type="general"  onclick="setType('general')">일반</button>`;
 
   area.innerHTML = `
     <div class="compose">
       <div class="compose-lbl">새 게시물 — ${activeTab}</div>
       <textarea id="compose-text" placeholder="공유할 내용을 입력하세요..."></textarea>
       <div class="compose-foot">
-        <div class="type-row">${typeBtns}</div>
+        <div class="type-row">
+          <button class="tbtn active" data-type="tip"      onclick="setType('tip')">정보공유</button>
+          <button class="tbtn"        data-type="protocol" onclick="setType('protocol')">프로토콜</button>
+          <button class="tbtn"        data-type="notice"   onclick="setType('notice')">공지</button>
+          <button class="tbtn"        data-type="general"  onclick="setType('general')">일반</button>
+        </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <input class="author-in" id="author-input" placeholder="이름/닉네임" maxlength="10" />
           <button class="post-btn" id="post-btn" onclick="submitPost()">게시</button>
@@ -333,8 +350,7 @@ window.setType = function(t) {
 // ── Image handling ──
 window.handleFiles = function(files) { Array.from(files).forEach(compressAndAdd); };
 window.handleDrop  = function(e) {
-  e.preventDefault();
-  document.getElementById('upload-zone')?.classList.remove('drag-over');
+  e.preventDefault(); document.getElementById('upload-zone')?.classList.remove('drag-over');
   handleFiles(e.dataTransfer.files);
 };
 function compressAndAdd(file) {
@@ -343,20 +359,15 @@ function compressAndAdd(file) {
   reader.onload = ev => {
     const img = new Image();
     img.onload = () => {
-      const MAX = 900;
-      let w = img.width, h = img.height;
-      if (w > MAX || h > MAX) {
-        if (w > h) { h = Math.round(h*MAX/w); w = MAX; }
-        else       { w = Math.round(w*MAX/h); h = MAX; }
-      }
+      const MAX = 900; let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) { if (w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;} }
       const canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       let q = .85, dataUrl = canvas.toDataURL('image/jpeg', q);
       while (dataUrl.length > 750000 && q > .3) { q -= .1; dataUrl = canvas.toDataURL('image/jpeg', q); }
       if (dataUrl.length > 900000) { showToast('이미지가 너무 커요'); return; }
-      pendingImgs.push({ dataUrl, name: file.name });
-      renderPreviews();
+      pendingImgs.push({ dataUrl, name: file.name }); renderPreviews();
     };
     img.src = ev.target.result;
   };
@@ -365,135 +376,265 @@ function compressAndAdd(file) {
 function renderPreviews() {
   const wrap = document.getElementById('prev-wrap');
   if (!wrap) return;
-  wrap.innerHTML = pendingImgs.map((img, i) => `
-    <div class="prev-item">
-      <img src="${img.dataUrl}" />
-      <button class="rm-btn" onclick="removeImg(${i})">✕</button>
-    </div>`).join('');
+  wrap.innerHTML = pendingImgs.map((img,i) => `
+    <div class="prev-item"><img src="${img.dataUrl}" />
+    <button class="rm-btn" onclick="removeImg(${i})">✕</button></div>`).join('');
 }
-window.removeImg = function(i) { pendingImgs.splice(i, 1); renderPreviews(); };
+window.removeImg = function(i) { pendingImgs.splice(i,1); renderPreviews(); };
 
 // ── Submit ──
 window.submitPost = async function() {
   const btn    = document.getElementById('post-btn');
-  const author = (document.getElementById('author-input')?.value || '').trim() || '익명';
-
+  const author = (document.getElementById('author-input')?.value||'').trim()||'익명';
   if (activeTab === '스케줄') {
     if (!pendingImgs.length) { showToast('이미지를 먼저 추가해주세요'); return; }
     btn.disabled = true;
     try {
       for (const img of pendingImgs) {
-        await addDoc(collection(db, 'posts'), {
-          dept: '스케줄', type: 'schedule',
-          content: img.name, images: [img.dataUrl],
-          author, important: false, createdAt: serverTimestamp()
-        });
+        await addDoc(collection(db,'posts'), { dept:'스케줄', type:'schedule', content:img.name, images:[img.dataUrl], author, important:false, createdAt:serverTimestamp() });
       }
-      pendingImgs = []; renderPreviews();
-      showToast('업로드 완료!');
-    } catch(e) { showToast('오류가 발생했습니다'); }
-    finally { btn.disabled = false; }
+      pendingImgs=[]; renderPreviews(); showToast('업로드 완료!');
+    } catch(e) { showToast('오류가 발생했습니다'); } finally { btn.disabled=false; }
     return;
   }
-
-  const text = (document.getElementById('compose-text')?.value || '').trim();
+  const text = (document.getElementById('compose-text')?.value||'').trim();
   if (!text) { showToast('내용을 입력해주세요'); return; }
   btn.disabled = true;
   try {
-    await addDoc(collection(db, 'posts'), {
-      dept: activeTab, type: activeType, content: text, images: [],
-      author, important: false, createdAt: serverTimestamp()
-    });
-    document.getElementById('compose-text').value = '';
-    showToast('게시되었습니다!');
-  } catch(e) { showToast('오류가 발생했습니다'); }
-  finally { btn.disabled = false; }
+    await addDoc(collection(db,'posts'), { dept:activeTab, type:activeType, content:text, images:[], author, important:false, createdAt:serverTimestamp() });
+    document.getElementById('compose-text').value = ''; showToast('게시되었습니다!');
+  } catch(e) { showToast('오류가 발생했습니다'); } finally { btn.disabled=false; }
 };
 
 // ── Post actions ──
 window.toggleImportant = async function(id, current) {
-  try {
-    await updateDoc(doc(db, 'posts', id), { important: !current });
-    showToast(!current ? '⭐ 중요 표시했습니다' : '중요 표시를 해제했습니다');
-  } catch(e) { showToast('오류가 발생했습니다'); }
+  try { await updateDoc(doc(db,'posts',id), { important:!current }); showToast(!current?'⭐ 중요 표시했습니다':'중요 표시를 해제했습니다'); }
+  catch(e) { showToast('오류가 발생했습니다'); }
 };
-
 window.deletePost = async function(id) {
   if (!confirm('이 게시물을 삭제할까요?')) return;
-  try {
-    await deleteDoc(doc(db, 'posts', id));
-    showToast('삭제되었습니다');
-  } catch(e) { showToast('오류가 발생했습니다'); }
+  try { await deleteDoc(doc(db,'posts',id)); showToast('삭제되었습니다'); }
+  catch(e) { showToast('오류가 발생했습니다'); }
 };
-
-window.startEdit = function(id, content) {
-  editingId = id;
-  const card = document.getElementById('card-' + id);
-  const contentEl = card.querySelector('.post-content');
-  contentEl.innerHTML = `
-    <div class="edit-box">
-      <textarea id="edit-ta-${id}">${content}</textarea>
-      <div class="edit-actions">
-        <button onclick="cancelEdit('${id}')">취소</button>
-        <button class="save-btn" onclick="saveEdit('${id}')">저장</button>
-      </div>
-    </div>`;
-  const ta = document.getElementById('edit-ta-' + id);
-  ta.style.height = ta.scrollHeight + 'px';
-  ta.focus();
-};
-
-window.cancelEdit = function(id) {
-  editingId = null;
-  renderPosts();
-};
-
-window.saveEdit = async function(id) {
-  const val = (document.getElementById('edit-ta-' + id)?.value || '').trim();
-  if (!val) { showToast('내용을 입력해주세요'); return; }
-  try {
-    await updateDoc(doc(db, 'posts', id), { content: val });
-    editingId = null;
-    showToast('수정되었습니다');
-  } catch(e) { showToast('오류가 발생했습니다'); }
-};
-
 window.deleteSchedPost = async function(e, id) {
   e.stopPropagation();
   if (!confirm('이 스케줄을 삭제할까요?')) return;
-  try {
-    await deleteDoc(doc(db, 'posts', id));
-    showToast('삭제되었습니다');
-  } catch(e) { showToast('오류가 발생했습니다'); }
+  try { await deleteDoc(doc(db,'posts',id)); showToast('삭제되었습니다'); }
+  catch(e) { showToast('오류가 발생했습니다'); }
+};
+window.startEdit = function(id, content) {
+  editingId = id;
+  const card = document.getElementById('card-'+id);
+  if (!card) return;
+  card.querySelector('.post-content').innerHTML = `
+    <div class="edit-box">
+      <textarea id="edit-ta-${id}">${content}</textarea>
+      <div class="edit-actions">
+        <button onclick="cancelEdit()">취소</button>
+        <button class="save-btn" onclick="saveEdit('${id}')">저장</button>
+      </div>
+    </div>`;
+  const ta = document.getElementById('edit-ta-'+id);
+  ta.style.height = ta.scrollHeight+'px'; ta.focus();
+};
+window.cancelEdit = function() { editingId=null; renderPosts(); };
+window.saveEdit = async function(id) {
+  const val = (document.getElementById('edit-ta-'+id)?.value||'').trim();
+  if (!val) { showToast('내용을 입력해주세요'); return; }
+  try { await updateDoc(doc(db,'posts',id), { content:val }); editingId=null; showToast('수정되었습니다'); }
+  catch(e) { showToast('오류가 발생했습니다'); }
 };
 
-// ── Render ──
+// ── Render posts ──
 function fmtTime(ts) {
   if (!ts) return '방금';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   const s = Math.floor((Date.now()-d)/1000);
-  if (s < 60) return '방금';
-  if (s < 3600) return Math.floor(s/60)+'분 전';
-  if (s < 86400) return Math.floor(s/3600)+'시간 전';
+  if (s<60) return '방금';
+  if (s<3600) return Math.floor(s/60)+'분 전';
+  if (s<86400) return Math.floor(s/3600)+'시간 전';
   return `${d.getMonth()+1}/${d.getDate()}`;
 }
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
 
 function renderPosts() {
-  const container  = document.getElementById('posts-container');
-  const isSchedule = activeTab === '스케줄';
+  const container = document.getElementById('posts-container');
+
+  // ── 사용방법 탭 ──
+  if (activeTab === '사용방법') {
+    container.innerHTML = `
+      <div class="guide">
+
+        <div class="guide-section">
+          <div class="guide-section-hdr open" onclick="toggleGuide(this)">
+            <span class="g-icon">📱</span>
+            <span class="g-title">아이폰에서 홈 화면에 추가하기</span>
+            <span class="g-arrow">▼</span>
+          </div>
+          <div class="guide-body open">
+            <div class="guide-step">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <div class="step-title">Safari로 접속하세요</div>
+                <div class="step-desc">반드시 <b>Safari</b> 브라우저를 사용해야 합니다. Chrome이나 다른 브라우저는 홈 화면 추가가 안 돼요.</div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <div class="step-title">하단 공유 버튼을 누르세요</div>
+                <div class="step-desc">Safari 하단 가운데에 있는 <b>□↑ 공유 버튼</b>을 탭하세요.</div>
+                <div class="step-img">Safari 화면 하단 → <b>□↑</b> 버튼 (네모에 화살표 모양)</div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <div class="step-title">홈 화면에 추가를 선택하세요</div>
+                <div class="step-desc">스크롤을 내려서 <b>「홈 화면에 추가」</b>를 탭하세요.</div>
+                <div class="step-img">공유 메뉴 → 스크롤 → <b>홈 화면에 추가</b> 탭</div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">4</div>
+              <div class="step-content">
+                <div class="step-title">추가 버튼을 누르세요</div>
+                <div class="step-desc">이름은 <b>「ER 담벼락」</b>으로 자동 설정됩니다. 오른쪽 위 <b>추가</b>를 탭하면 완료!</div>
+              </div>
+            </div>
+            <div class="tip-box">💡 이제 홈 화면에서 앱처럼 바로 실행할 수 있어요. 전체 화면으로 열립니다!</div>
+          </div>
+        </div>
+
+        <div class="guide-section">
+          <div class="guide-section-hdr" onclick="toggleGuide(this)">
+            <span class="g-icon">🤖</span>
+            <span class="g-title">안드로이드에서 홈 화면에 추가하기</span>
+            <span class="g-arrow">▼</span>
+          </div>
+          <div class="guide-body">
+            <div class="guide-step">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <div class="step-title">Chrome으로 접속하세요</div>
+                <div class="step-desc"><b>Chrome</b> 브라우저로 접속하세요. 삼성 인터넷도 가능합니다.</div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <div class="step-title">메뉴를 여세요</div>
+                <div class="step-desc">오른쪽 상단 <b>⋮ (점 세 개)</b> 버튼을 탭하세요.</div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <div class="step-title">홈 화면에 추가를 선택하세요</div>
+                <div class="step-desc">메뉴에서 <b>「홈 화면에 추가」</b> 또는 <b>「앱 설치」</b>를 탭하세요.</div>
+                <div class="step-img">⋮ 메뉴 → <b>홈 화면에 추가</b> 또는 <b>앱 설치</b></div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">4</div>
+              <div class="step-content">
+                <div class="step-title">설치 또는 추가를 누르세요</div>
+                <div class="step-desc">팝업이 뜨면 <b>설치</b> 또는 <b>추가</b>를 탭하면 완료!</div>
+              </div>
+            </div>
+            <div class="tip-box">💡 안드로이드는 상단에 「앱 설치」 배너가 자동으로 뜨기도 해요!</div>
+          </div>
+        </div>
+
+        <div class="guide-section">
+          <div class="guide-section-hdr" onclick="toggleGuide(this)">
+            <span class="g-icon">📋</span>
+            <span class="g-title">담벼락 사용 방법</span>
+            <span class="g-arrow">▼</span>
+          </div>
+          <div class="guide-body">
+            <div class="guide-step">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <div class="step-title">탭으로 과를 선택하세요</div>
+                <div class="step-desc">상단 탭에서 원하는 과를 선택하면 해당 과 게시물만 보입니다. <b>+ 과 추가</b>로 새 탭도 만들 수 있어요.</div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <div class="step-title">게시물 유형을 선택하세요</div>
+                <div class="step-desc">글 쓸 때 유형을 선택하면 색깔 태그가 붙어요.</div>
+                <div class="badge-row">
+                  <span class="badge bd-tip">정보공유</span>
+                  <span class="badge bd-proto">프로토콜</span>
+                  <span class="badge bd-notice">공지</span>
+                  <span class="badge bd-gen">일반</span>
+                </div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <div class="step-title">⭐ 중요 표시를 활용하세요</div>
+                <div class="step-desc">중요한 글에 ⭐를 누르면 <b>중요 탭</b>에 모입니다. 다시 누르면 해제돼요.</div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">4</div>
+              <div class="step-content">
+                <div class="step-title">스케줄 탭에 이미지를 올리세요</div>
+                <div class="step-desc">당직표나 스케줄 사진을 <b>스케줄 탭</b>에 올리면 갤러리 형태로 보입니다. 탭하면 크게 볼 수 있어요.</div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="step-num">5</div>
+              <div class="step-content">
+                <div class="step-title">글 수정과 삭제도 가능해요</div>
+                <div class="step-desc">각 게시물 하단의 <b>✏️ 수정</b> 또는 <b>🗑 삭제</b> 버튼을 누르세요.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-section">
+          <div class="guide-section-hdr" onclick="toggleGuide(this)">
+            <span class="g-icon">🔗</span>
+            <span class="g-title">다른 선생님께 공유하는 방법</span>
+            <span class="g-arrow">▼</span>
+          </div>
+          <div class="guide-body">
+            <div class="guide-step">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <div class="step-title">아래 주소를 카톡으로 공유하세요</div>
+                <div class="step-desc">링크로 접속하면 바로 사용 가능합니다. 별도 설치 없이 브라우저에서 바로 열려요.</div>
+                <div class="url-box">https://hyinuyu.github.io/er-board/</div>
+              </div>
+            </div>
+            <div class="tip-box">💡 접속 후 위의 「홈 화면에 추가」 방법대로 하면 앱처럼 쓸 수 있어요!</div>
+          </div>
+        </div>
+
+      </div>`;
+
+    // attach toggle handlers
+    document.querySelectorAll('.guide-section-hdr').forEach(hdr => {
+      const body = hdr.nextElementSibling;
+      if (hdr.classList.contains('open')) body.classList.add('open');
+    });
+    return;
+  }
+
+  // ── Normal posts ──
+  const isSchedule  = activeTab === '스케줄';
   const isImportant = activeTab === '중요';
 
   let list = isImportant  ? allPosts.filter(p => p.important && p.type !== 'schedule')
            : isSchedule   ? allPosts.filter(p => p.dept === '스케줄')
            :                allPosts.filter(p => p.dept === activeTab);
 
-  // important first, then by time (already ordered by time from firestore)
-  if (!isImportant) {
-    list = [...list].sort((a,b) => (b.important?1:0)-(a.important?1:0));
-  }
+  if (!isImportant) list = [...list].sort((a,b) => (b.important?1:0)-(a.important?1:0));
 
   if (!list.length) {
     container.innerHTML = '<div class="empty">아직 게시물이 없습니다.<br>첫 번째 글을 올려보세요!</div>';
@@ -502,13 +643,10 @@ function renderPosts() {
 
   if (isSchedule) {
     container.innerHTML = `<div class="sched-grid">${list.map(p=>`
-      <div class="sched-card" onclick="openLightbox('${encodeURIComponent(p.images?.[0]||'')}')">
-        <img src="${p.images?.[0]||''}" alt="${esc(p.content)}" loading="lazy" />
+      <div class="sched-card">
+        <img src="${p.images?.[0]||''}" alt="${esc(p.content)}" loading="lazy" onclick="openLightbox('${encodeURIComponent(p.images?.[0]||'')}')"/>
         <div class="sched-info">
-          <div>
-            <div class="sched-name">${esc(p.content)}</div>
-            <div class="sched-meta">${esc(p.author)} · ${fmtTime(p.createdAt)}</div>
-          </div>
+          <div><div class="sched-name">${esc(p.content)}</div><div class="sched-meta">${esc(p.author)} · ${fmtTime(p.createdAt)}</div></div>
           <button class="sched-del" onclick="deleteSchedPost(event,'${p.id}')">✕</button>
         </div>
       </div>`).join('')}</div>`;
@@ -516,53 +654,51 @@ function renderPosts() {
   }
 
   container.innerHTML = list.map(p => {
-    const deptBadge = activeTab === '중요'
-      ? `<span class="badge bd-dept">${esc(p.dept)}</span>`
-      : p.dept === '응급의학과'
-        ? `<span class="badge bd-er">응급의학과</span>`
-        : `<span class="badge bd-dept">${esc(p.dept)}</span>`;
-    const tb = typeBadge[p.type]||'bd-gen';
-    const tl = typeLabels[p.type]||p.type;
+    const deptBadge = p.dept==='응급의학과'
+      ? `<span class="badge bd-er">응급의학과</span>`
+      : `<span class="badge bd-dept">${esc(p.dept)}</span>`;
     const imgs = (p.images||[]).filter(Boolean);
-    const isImpt = !!p.important;
-
     return `
-      <div class="post-card${isImpt?' important':''}" id="card-${p.id}">
+      <div class="post-card${p.important?' important':''}" id="card-${p.id}">
         <div class="post-top">
-          ${isImpt ? '<span style="font-size:14px;">⭐</span>' : ''}
+          ${p.important?'<span style="font-size:14px;">⭐</span>':''}
           ${deptBadge}
-          <span class="badge ${tb}">${tl}</span>
+          <span class="badge ${typeBadge[p.type]||'bd-gen'}">${typeLabels[p.type]||p.type}</span>
           <span class="post-time">${fmtTime(p.createdAt)}</span>
         </div>
         <div class="post-content">${esc(p.content)}</div>
-        ${imgs.length?`<div class="post-imgs">${imgs.map(src=>`<img src="${src}" onclick="openLightbox('${encodeURIComponent(src)}')" loading="lazy" />`).join('')}</div>`:''}
+        ${imgs.length?`<div class="post-imgs">${imgs.map(src=>`<img src="${src}" onclick="openLightbox('${encodeURIComponent(src)}')" loading="lazy"/>`).join('')}</div>`:''}
         <div class="post-author">${esc(p.author||'익명')}</div>
         <div class="post-actions">
-          <button class="action-btn${isImpt?' important-on':''}" onclick="toggleImportant('${p.id}',${isImpt})">
-            ⭐ ${isImpt?'중요 해제':'중요'}
-          </button>
-          <button class="action-btn" onclick="startEdit('${p.id}', \`${(p.content||'').replace(/`/g,"'").replace(/\n/g,'\\n')}\`)">
-            ✏️ 수정
-          </button>
+          <button class="action-btn${p.important?' imp-on':''}" onclick="toggleImportant('${p.id}',${!!p.important})">⭐ ${p.important?'중요 해제':'중요'}</button>
+          <button class="action-btn" onclick="startEdit('${p.id}',\`${(p.content||'').replace(/`/g,"'").replace(/\n/g,'\\n')}\`)">✏️ 수정</button>
           <button class="action-btn del" onclick="deletePost('${p.id}')">🗑 삭제</button>
         </div>
       </div>`;
   }).join('');
 }
 
+// ── Guide accordion ──
+window.toggleGuide = function(hdr) {
+  const body = hdr.nextElementSibling;
+  const isOpen = hdr.classList.contains('open');
+  hdr.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+};
+
 // ── Lightbox ──
 window.openLightbox = function(encoded) {
   const lb = document.createElement('div');
   lb.className = 'lightbox';
   lb.innerHTML = `<img src="${decodeURIComponent(encoded)}" />`;
-  lb.onclick   = () => lb.remove();
+  lb.onclick = () => lb.remove();
   document.body.appendChild(lb);
 };
 
 // ── Real-time ──
 onSnapshot(query(collection(db,'posts'), orderBy('createdAt','desc')), snap => {
-  allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  if (editingId) return; // don't re-render while editing
+  allPosts = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  if (editingId) return;
   renderPosts();
 }, () => showToast('연결 오류 — Firestore 규칙을 확인해주세요'));
 
@@ -585,7 +721,9 @@ window.addDept = async function() {
   const val = document.getElementById('new-dept').value.trim();
   if (!val) { closeModal(); return; }
   if (depts.includes(val)) { showToast('이미 있는 탭이에요'); return; }
-  depts.push(val);
+  // insert before 사용방법
+  const idx = depts.indexOf('사용방법');
+  if (idx !== -1) depts.splice(idx, 0, val); else depts.push(val);
   await saveDepts();
   activeTab = val; activeType = 'tip';
   closeModal(); renderTabs(); renderCompose(); renderPosts();
