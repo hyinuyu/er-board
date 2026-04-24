@@ -211,7 +211,9 @@ const firebaseConfig = {
 const db = getFirestore(initializeApp(firebaseConfig));
 
 const FIXED = ['중요', '응급의학과', '스케줄', '사용방법'];
-let depts     = ['중요', '응급의학과', '스케줄', '정형외과', '신경외과', '내과', '외과', '산부인과', '사용방법'];
+const FIXED_FRONT = ['중요', '응급의학과'];
+const FIXED_BACK  = ['스케줄', '사용방법'];
+let depts     = ['중요', '응급의학과', '정형외과', '신경외과', '내과', '외과', '산부인과', '스케줄', '사용방법'];
 let activeTab = '응급의학과';
 let activeType = 'tip';
 let allPosts  = [];
@@ -228,12 +230,11 @@ async function loadDepts() {
     if (snap.exists() && snap.data().list?.length) {
       depts = snap.data().list;
       FIXED.forEach(f => { if (!depts.includes(f)) depts.push(f); });
-      // ensure order: fixed first
-      const fixedList = FIXED.filter(f => depts.includes(f));
-      const rest = depts.filter(d => !FIXED.includes(d));
-      depts = [...fixedList, ...rest];
     }
   } catch(e) {}
+  // always enforce order: FIXED_FRONT ... middle ... FIXED_BACK
+  const middle = depts.filter(d => !FIXED.includes(d));
+  depts = [...FIXED_FRONT, ...middle, ...FIXED_BACK];
   renderTabs(); renderCompose();
 }
 async function saveDepts() {
@@ -774,8 +775,8 @@ window.addDept = async function() {
   const val = document.getElementById('new-dept').value.trim();
   if (!val) { closeModal(); return; }
   if (depts.includes(val)) { showToast('이미 있는 탭이에요'); return; }
-  // insert before 사용방법
-  const idx = depts.indexOf('사용방법');
+  // insert before 스케줄 (start of FIXED_BACK)
+  const idx = depts.indexOf('스케줄');
   if (idx !== -1) depts.splice(idx, 0, val); else depts.push(val);
   await saveDepts();
   activeTab = val; activeType = 'tip';
