@@ -218,7 +218,7 @@
     <div class="splash-card c-green" onclick="enterApp('입원환자')"><div class="sc-icon">🛏️</div><div class="sc-label">입원환자</div><div class="sc-desc">입원 환자 정보</div></div>
     <div class="splash-card c-amber" onclick="enterApp('스케줄')"><div class="sc-icon">🗓️</div><div class="sc-label">스케줄</div><div class="sc-desc">당직표 · 일정</div></div>
   </div>
-  <button class="splash-enter" onclick="enterApp('응급의학과')">시작하기 →</button>
+  <button class="splash-enter" onclick="enterApp('중요')">시작하기 →</button>
   <div class="splash-notice">실시간 동기화 · Firebase 연결됨</div>
 </div>
 
@@ -882,7 +882,7 @@ window.enterApp = function(tab) {
   const splash = document.getElementById('splash');
   splash.classList.add('hide');
   setTimeout(() => { splash.style.display = 'none'; }, 400);
-  activeTab = tab;
+  activeTab = tab || '중요';
   renderTabs(); renderCompose(); renderPosts();
 };
 
