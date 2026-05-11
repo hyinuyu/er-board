@@ -71,6 +71,8 @@
     .tbtn.active[data-type="protocol"] { background: var(--green-l); color: var(--green-t); border-color: #a8dcc5; }
     .tbtn.active[data-type="notice"]   { background: var(--red-l);   color: var(--red-t);   border-color: #f0b9b4; }
     .tbtn.active[data-type="general"]  { background: var(--gray-l);  color: var(--gray-t);  border-color: #ccc; }
+    .compose-title-in { width: 100%; border: 1px solid var(--border); border-radius: var(--rs); padding: 9px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--surface2); outline: none; margin-bottom: 10px; transition: border-color .13s; }
+    .compose-title-in:focus { border-color: var(--blue); }
     .author-in { border: 1px solid var(--border); border-radius: var(--rs); padding: 6px 10px; font-size: 13px; font-family: inherit; color: var(--text); background: var(--surface2); outline: none; width: 90px; transition: border-color .13s; }
     .author-in:focus { border-color: var(--blue); }
     .post-btn { padding: 7px 22px; background: var(--blue); color: #fff; border: none; border-radius: var(--rs); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .13s; }
@@ -128,6 +130,8 @@
     .sched-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; transition: border-color .13s, transform .13s; }
     .sched-card:hover { border-color: var(--border-h); transform: translateY(-1px); }
     .sched-card img { width: 100%; aspect-ratio: 3/2; object-fit: contain; display: block; cursor: pointer; background: var(--surface2); }
+    .sched-multi { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--surface2); }
+    .sched-multi img { aspect-ratio: 1; object-fit: cover; }
     .sched-info { padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); }
     .sched-name { font-size: 15px; font-weight: 600; color: var(--text); }
     .sched-meta { font-size: 12px; color: var(--text3); margin-top: 3px; }
@@ -355,8 +359,7 @@ function renderCompose() {
 
   const isSchedule = activeTab === '스케줄';
 
-  const innerHtml = isSchedule ? `
-    <div class="compose-lbl">스케줄 이미지 업로드</div>
+  const imageUploadBlock = `
     <div class="prev-wrap" id="prev-wrap"></div>
     <div class="img-upload-area" id="upload-zone"
       onclick="document.getElementById('file-in').click()"
@@ -364,15 +367,21 @@ function renderCompose() {
       ondragleave="this.classList.remove('drag-over')"
       ondrop="handleDrop(event)">
       <div class="upload-icon">🖼️</div>
-      <div class="upload-hint">클릭하거나 이미지를 드래그하세요</div>
+      <div class="upload-hint">${isSchedule ? '클릭하거나 이미지를 드래그하세요' : '사진 추가 (선택)'}</div>
       <div class="upload-hint2">JPG, PNG (자동 압축 적용)</div>
     </div>
-    <input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
+    <input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />`;
+
+  const innerHtml = isSchedule ? `
+    <div class="compose-lbl">스케줄 이미지 업로드</div>
+    <input type="text" id="compose-title" placeholder="제목 (예: 2025년 5월 당직표)" class="compose-title-in" maxlength="40" />
+    ${imageUploadBlock}
     <div class="compose-foot" style="justify-content:flex-end;">
       <button class="post-btn" id="post-btn" onclick="submitPost()">업로드</button>
     </div>` : `
     <div class="compose-lbl">새 게시물 — ${activeTab}</div>
     <textarea id="compose-text" placeholder="공유할 내용을 입력하세요..." rows="3"></textarea>
+    ${imageUploadBlock}
     <div class="compose-foot">
       <div class="type-row">
         <button class="tbtn active" data-type="tip"      onclick="setType('tip')">정보공유</button>
@@ -391,6 +400,7 @@ function renderCompose() {
       <div class="compose-inner">${innerHtml}</div>
     </div>`;
 
+  pendingImgs = [];
   activeType = 'tip';
 }
 
@@ -436,26 +446,43 @@ window.removeImg = function(i) { pendingImgs.splice(i,1); renderPreviews(); };
 
 // ── Submit ──
 window.submitPost = async function() {
-  const btn    = document.getElementById('post-btn');
+  const btn = document.getElementById('post-btn');
   const author = '';
+
   if (activeTab === '스케줄') {
     if (!pendingImgs.length) { showToast('이미지를 먼저 추가해주세요'); return; }
+    const title = (document.getElementById('compose-title')?.value || '').trim();
+    if (!title) { showToast('제목을 입력해주세요'); return; }
     btn.disabled = true;
     try {
-      for (const img of pendingImgs) {
-        await addDoc(collection(db,'posts'), { dept:'스케줄', type:'schedule', content:img.name, images:[img.dataUrl], author, important:false, createdAt:serverTimestamp() });
-      }
-      pendingImgs=[]; renderPreviews(); closeCompose(); showToast('업로드 완료!');
-    } catch(e) { showToast('오류가 발생했습니다'); } finally { btn.disabled=false; }
+      const imageUrls = pendingImgs.map(i => i.dataUrl);
+      await addDoc(collection(db,'posts'), {
+        dept:'스케줄', type:'schedule',
+        content: title, images: imageUrls,
+        author, important:false, createdAt:serverTimestamp()
+      });
+      pendingImgs = []; renderPreviews(); closeCompose();
+      showToast('업로드 완료!');
+    } catch(e) { console.error(e); showToast('오류가 발생했습니다'); }
+    finally { btn.disabled = false; }
     return;
   }
-  const text = (document.getElementById('compose-text')?.value||'').trim();
-  if (!text) { showToast('내용을 입력해주세요'); return; }
+
+  const text = (document.getElementById('compose-text')?.value || '').trim();
+  if (!text && !pendingImgs.length) { showToast('내용 또는 사진을 추가해주세요'); return; }
   btn.disabled = true;
   try {
-    await addDoc(collection(db,'posts'), { dept:activeTab, type:activeType, content:text, images:[], author, important:false, createdAt:serverTimestamp() });
-    document.getElementById('compose-text').value = ''; closeCompose(); showToast('게시되었습니다!');
-  } catch(e) { showToast('오류가 발생했습니다'); } finally { btn.disabled=false; }
+    const imageUrls = pendingImgs.map(i => i.dataUrl);
+    await addDoc(collection(db,'posts'), {
+      dept: activeTab, type: activeType,
+      content: text, images: imageUrls,
+      author, important:false, createdAt: serverTimestamp()
+    });
+    document.getElementById('compose-text').value = '';
+    pendingImgs = []; renderPreviews(); closeCompose();
+    showToast('게시되었습니다!');
+  } catch(e) { console.error(e); showToast('오류가 발생했습니다'); }
+  finally { btn.disabled = false; }
 };
 
 // ── Post actions ──
@@ -764,14 +791,19 @@ function renderPosts() {
   }
 
   if (isSchedule) {
-    container.innerHTML = `<div class="sched-grid">${list.map(p=>`
+    container.innerHTML = `<div class="sched-grid">${list.map(p=>{
+      const imgs = (p.images||[]).filter(Boolean);
+      const imagesHtml = imgs.length > 1
+        ? `<div class="sched-multi">${imgs.map(src=>`<img src="${src}" onclick="openLightbox('${encodeURIComponent(src)}')" loading="lazy"/>`).join('')}</div>`
+        : `<img src="${imgs[0]||''}" alt="${esc(p.content)}" loading="lazy" onclick="openLightbox('${encodeURIComponent(imgs[0]||'')}')"/>`;
+      return `
       <div class="sched-card">
-        <img src="${p.images?.[0]||''}" alt="${esc(p.content)}" loading="lazy" onclick="openLightbox('${encodeURIComponent(p.images?.[0]||'')}')"/>
+        ${imagesHtml}
         <div class="sched-info">
           <div><div class="sched-name">${esc(p.content)}</div><div class="sched-meta">${fmtTime(p.createdAt)}</div></div>
           <button class="sched-del" onclick="deleteSchedPost(event,'${p.id}')">✕</button>
         </div>
-      </div>`).join('')}</div>`;
+      </div>`;}).join('')}</div>`;
     return;
   }
 
