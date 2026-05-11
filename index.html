@@ -495,6 +495,36 @@ window.deletePost = async function(id) {
   try { await deleteDoc(doc(db,'posts',id)); showToast('삭제되었습니다'); }
   catch(e) { showToast('오류가 발생했습니다'); }
 };
+window.startEditSched = function(id, currentTitle) {
+  const card = document.getElementById('sched-' + id);
+  if (!card) return;
+  const info = card.querySelector('.sched-info');
+  info.innerHTML = `
+    <div style="flex:1;display:flex;gap:6px;align-items:center;">
+      <input type="text" id="sched-edit-${id}" value="${currentTitle.replace(/"/g,'&quot;')}"
+        style="flex:1;border:1.5px solid var(--blue);border-radius:8px;padding:7px 10px;font-size:14px;font-family:inherit;background:var(--surface2);color:var(--text);outline:none;" />
+      <button class="sched-del" style="color:var(--text2);" onclick="cancelEditSched('${id}','${currentTitle.replace(/'/g,"\\'")}')">취소</button>
+      <button class="sched-del" style="color:#fff;background:var(--blue);" onclick="saveEditSched('${id}')">저장</button>
+    </div>`;
+  const inp = document.getElementById('sched-edit-' + id);
+  inp.focus();
+  inp.select();
+};
+window.cancelEditSched = function(id, originalTitle) {
+  renderPosts();
+};
+window.saveEditSched = async function(id) {
+  const val = (document.getElementById('sched-edit-' + id)?.value || '').trim();
+  if (!val) { showToast('제목을 입력해주세요'); return; }
+  try {
+    const idx = allPosts.findIndex(p => p.id === id);
+    if (idx !== -1) allPosts[idx] = { ...allPosts[idx], content: val };
+    renderPosts();
+    showToast('수정되었습니다');
+    await updateDoc(doc(db,'posts',id), { content: val });
+  } catch(e) { console.error(e); showToast('오류가 발생했습니다'); }
+};
+
 window.deleteSchedPost = async function(e, id) {
   e.stopPropagation();
   if (!confirm('이 스케줄을 삭제할까요?')) return;
@@ -546,6 +576,24 @@ window.saveEdit = async function(id) {
 };
 
 // ── Render posts ──
+function parseScheduleKey(title) {
+  if (!title) return 0;
+  const s = String(title);
+  // YYYY + month: 2026.03, 2026-03, 2026/03, 2026년 3월, "2026 3월" 등
+  let m = s.match(/(20\d{2})\s*[.\-/년 ]+\s*(\d{1,2})/);
+  if (m) return parseInt(m[1]) * 100 + parseInt(m[2]);
+  // YY + month: 26.3, 26-3, 26/3
+  m = s.match(/\b(\d{2})\s*[.\-/]\s*(\d{1,2})\b/);
+  if (m) return (2000 + parseInt(m[1])) * 100 + parseInt(m[2]);
+  // Just month: "3월", "12월"
+  m = s.match(/(\d{1,2})\s*월/);
+  if (m) return parseInt(m[1]);
+  // First number fallback
+  m = s.match(/(\d+)/);
+  if (m) return parseInt(m[1]);
+  return 0;
+}
+
 function fmtTime(ts) {
   if (!ts) return '';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -791,17 +839,23 @@ function renderPosts() {
   }
 
   if (isSchedule) {
+    // Sort: parsed schedule key descending (newest year/month first)
+    list = [...list].sort((a,b) => parseScheduleKey(b.content) - parseScheduleKey(a.content));
     container.innerHTML = `<div class="sched-grid">${list.map(p=>{
       const imgs = (p.images||[]).filter(Boolean);
       const imagesHtml = imgs.length > 1
         ? `<div class="sched-multi">${imgs.map(src=>`<img src="${src}" onclick="openLightbox('${encodeURIComponent(src)}')" loading="lazy"/>`).join('')}</div>`
         : `<img src="${imgs[0]||''}" alt="${esc(p.content)}" loading="lazy" onclick="openLightbox('${encodeURIComponent(imgs[0]||'')}')"/>`;
+      const safeTitle = (p.content||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
       return `
-      <div class="sched-card">
+      <div class="sched-card" id="sched-${p.id}">
         ${imagesHtml}
         <div class="sched-info">
-          <div><div class="sched-name">${esc(p.content)}</div><div class="sched-meta">${fmtTime(p.createdAt)}</div></div>
-          <button class="sched-del" onclick="deleteSchedPost(event,'${p.id}')">✕</button>
+          <div style="flex:1;min-width:0;"><div class="sched-name">${esc(p.content)}</div><div class="sched-meta">${fmtTime(p.createdAt)}</div></div>
+          <div style="display:flex;gap:2px;flex-shrink:0;">
+            <button class="sched-del" onclick="startEditSched('${p.id}','${safeTitle}')" title="제목 수정" style="color:var(--text2);">✎</button>
+            <button class="sched-del" onclick="deleteSchedPost(event,'${p.id}')" title="삭제">✕</button>
+          </div>
         </div>
       </div>`;}).join('')}</div>`;
     return;
